@@ -1,0 +1,264 @@
+{
+  "groups": [
+    {
+      "name": "jhipster",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties"
+    },
+    {
+      "name": "jhipster.async",
+      "sourceMethod": "getAsync()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Async"
+    },
+    {
+      "name": "jhipster.cache",
+      "sourceMethod": "getCache()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Cache"
+    },
+    {
+      "name": "jhipster.datasource",
+      "sourceMethod": "getDatasource()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Datasource"
+    },
+    {
+      "name": "jhipster.http",
+      "sourceMethod": "getHttp()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Http"
+    },
+    {
+      "name": "jhipster.http.cache",
+      "sourceMethod": "getCache()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Http",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Http$Cache"
+    },
+    {
+      "name": "jhipster.mail",
+      "sourceMethod": "getMail()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Mail"
+    },
+    {
+      "name": "jhipster.metrics",
+      "sourceMethod": "getMetrics()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Metrics"
+    },
+    {
+      "name": "jhipster.metrics.graphite",
+      "sourceMethod": "getGraphite()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Graphite"
+    },
+    {
+      "name": "jhipster.metrics.jmx",
+      "sourceMethod": "getJmx()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Jmx"
+    },
+    {
+      "name": "jhipster.metrics.spark",
+      "sourceMethod": "getSpark()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Spark"
+    },
+    {
+      "name": "jhipster.security",
+      "sourceMethod": "getSecurity()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Security"
+    },
+    {
+      "name": "jhipster.security.authentication",
+      "sourceMethod": "getAuthentication()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Security",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Security$Authentication"
+    },
+    {
+      "name": "jhipster.security.authentication.xauth",
+      "sourceMethod": "getXauth()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Security$Authentication",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Security$Authentication$Xauth"
+    },
+    {
+      "name": "jhipster.security.rememberme",
+      "sourceMethod": "getRememberme()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Security",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Security$Rememberme"
+    },
+    {
+      "name": "jhipster.swagger",
+      "sourceMethod": "getSwagger()",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties",
+      "type": "com.mmrath.sapp.config.ApplicationProperties$Swagger"
+    }
+  ],
+  "hints": [],
+  "properties": [
+    {
+      "defaultValue": 2,
+      "name": "jhipster.async.core-pool-size",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Async",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": 50,
+      "name": "jhipster.async.max-pool-size",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Async",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": 10000,
+      "name": "jhipster.async.queue-capacity",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Async",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": 3600,
+      "name": "jhipster.cache.time-to-live-seconds",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Cache",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": true,
+      "name": "jhipster.datasource.cache-prep-stmts",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Datasource",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "defaultValue": 250,
+      "name": "jhipster.datasource.prep-stmt-cache-size",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Datasource",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": 2048,
+      "name": "jhipster.datasource.prep-stmt-cache-sql-limit",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Datasource",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": true,
+      "name": "jhipster.datasource.use-server-prep-stmts",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Datasource",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "defaultValue": 31,
+      "name": "jhipster.http.cache.time-to-live-in-days",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Http$Cache",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": "jhipster@localhost",
+      "name": "jhipster.mail.from",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Mail",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": false,
+      "name": "jhipster.metrics.graphite.enabled",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Graphite",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "defaultValue": "localhost",
+      "name": "jhipster.metrics.graphite.host",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Graphite",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": 2003,
+      "name": "jhipster.metrics.graphite.port",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Graphite",
+      "type": "java.lang.Integer"
+    },
+    {
+      "defaultValue": "jhipster",
+      "name": "jhipster.metrics.graphite.prefix",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Graphite",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": true,
+      "name": "jhipster.metrics.jmx.enabled",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Jmx",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "defaultValue": false,
+      "name": "jhipster.metrics.spark.enabled",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Spark",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "defaultValue": "localhost",
+      "name": "jhipster.metrics.spark.host",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Spark",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": 9999,
+      "name": "jhipster.metrics.spark.port",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Metrics$Spark",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "jhipster.security.authentication.xauth.secret",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Security$Authentication$Xauth",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": 1800,
+      "name": "jhipster.security.authentication.xauth.token-validity-in-seconds",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Security$Authentication$Xauth",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "jhipster.security.rememberme.key",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Security$Rememberme",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "jhipster.swagger.contact",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": "jhipster API documentation",
+      "name": "jhipster.swagger.description",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "jhipster.swagger.license",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "jhipster.swagger.license-url",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "jhipster.swagger.terms-of-service-url",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": "jhipster API",
+      "name": "jhipster.swagger.title",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    },
+    {
+      "defaultValue": "0.0.1",
+      "name": "jhipster.swagger.version",
+      "sourceType": "com.mmrath.sapp.config.ApplicationProperties$Swagger",
+      "type": "java.lang.String"
+    }
+  ]
+}

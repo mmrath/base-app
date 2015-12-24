@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+  <changeSet author="murali" id="1.0.0">
+    <createTable tableName="sequence_table">
+      <column name="seq_name" type="VARCHAR(60)">
+        <constraints primaryKeyName="pk_sequence_table" primaryKey="true"/>
+      </column>
+      <column name="seq_value" type="BIGINT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.1">
+    <createTable tableName="t_permission">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="resource" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="access_level" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="id" constraintName="pk_permission"
+                   tableName="t_permission"/>
+    <addUniqueConstraint columnNames="resource,access_level" constraintName="uk_permission"
+                         tableName="t_permission"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.2">
+    <createTable tableName="t_role">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="id" constraintName="pk_role" tableName="t_role"/>
+    <addUniqueConstraint columnNames="name" constraintName="uk_role_01"
+                         deferrable="false" disabled="false"
+                         initiallyDeferred="false" tableName="t_role"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.3">
+    <createTable tableName="t_user">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="enabled" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_name" type="VARCHAR(255)"/>
+      <column name="last_name" type="VARCHAR(255)"/>
+      <column name="username" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="id" constraintName="pk_user" tableName="t_user"/>
+    <addUniqueConstraint columnNames="username" constraintName="uk_user_01"
+                         deferrable="false" disabled="false" initiallyDeferred="false"
+                         tableName="t_user"/>
+    <addUniqueConstraint columnNames="email" constraintName="uk_user_02" tableName="t_user"/>
+  </changeSet>
+  <changeSet author="murali" id="1.0.4">
+    <createTable tableName="t_role_permission">
+      <column name="role_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="permission_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="role_id"
+                             baseTableName="t_role_permission"
+                             constraintName="fk_role_permission_01"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id"
+                             referencedTableName="t_role"/>
+    <addForeignKeyConstraint baseColumnNames="permission_id" baseTableName="t_role_permission"
+                             constraintName="fk_role_permission_02" onDelete="RESTRICT"
+                             onUpdate="RESTRICT" referencedColumnNames="id"
+                             referencedTableName="t_permission"/>
+    <addUniqueConstraint columnNames="role_id,permission_id"
+                         constraintName="uk_role_permission_01"
+                         tableName="t_role_permission"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.5">
+    <createTable tableName="t_user_role">
+      <column name="user_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addUniqueConstraint columnNames="user_id,role_id" constraintName="uk_user_role_01"
+                         tableName="t_user_role"/>
+
+    <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="t_user_role"
+                             constraintName="fk_user_role_01"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_role"/>
+
+    <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="t_user_role"
+                             constraintName="fk_user_role_02"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_user"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.6">
+    <createTable tableName="t_credential">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="salt" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="password" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="expiry_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="invalid_attempts" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="locked" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+    <addPrimaryKey columnNames="id" constraintName="pk_credential"
+                   tableName="t_credential"/>
+  </changeSet>
+
+  <changeSet id="1.0.7" author="murali">
+    <createTable tableName="t_user_credential">
+      <column name="user_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="credential_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="user_id" constraintName="pk_user_credential"
+                   tableName="t_user_credential"/>
+    <addUniqueConstraint constraintName="uk_user_credential_01" tableName="t_user_credential"
+                         columnNames="user_id,credential_id"/>
+    <addForeignKeyConstraint baseColumnNames="credential_id" baseTableName="t_user_credential"
+                             constraintName="fk_user_credential_01"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_credential"/>
+    <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="t_user_credential"
+                             constraintName="fk_user_credential_02"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_user"/>
+
+  </changeSet>
+  <changeSet author="murali" id="1.0.8">
+    <createTable tableName="t_user_group">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="id" constraintName="pk_user_group" tableName="t_user_group"/>
+
+    <addUniqueConstraint columnNames="name" constraintName="uk_user_group_01"
+                         deferrable="false" disabled="false" initiallyDeferred="false"
+                         tableName="t_user_group"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.9">
+    <createTable tableName="t_user_group_role">
+      <column name="group_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint columnNames="group_id,role_id" constraintName="uk_user_group_role_01"
+                         deferrable="false" disabled="false" initiallyDeferred="false"
+                         tableName="t_user_group_role"/>
+
+    <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="t_user_group_role"
+                             constraintName="fk_user_group_role_01"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_user_group"/>
+
+    <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="t_user_group_role"
+                             constraintName="fk_user_group_role_02"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_role"/>
+
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.10">
+    <createTable tableName="t_user_group_user">
+      <column name="group_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addUniqueConstraint columnNames="group_id,user_id" constraintName="uk_user_group_user_01"
+                         deferrable="false" disabled="false" initiallyDeferred="false"
+                         tableName="t_user_group_user"/>
+    <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="t_user_group_user"
+                             constraintName="fk_user_group_user_01"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_user_group"/>
+
+    <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="t_user_group_user"
+                             constraintName="fk_user_group_user_02"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_user"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.11">
+    <createTable tableName="t_user_session">
+      <column name="session_id" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="start_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="end_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="auto_signed_off" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="session_id" constraintName="pk_user_session"
+                   tableName="t_user_session"/>
+    <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="t_user_session"
+                             constraintName="fk_user_session_01"
+                             onDelete="RESTRICT" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="t_user"/>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.12">
+    <loadData tableName="t_permission"
+              file="/db/changelog/data/security/permission/permission_v1_0.csv">
+      <column name="id" type="NUMERIC"/>
+      <column name="name" type="STRING"/>
+      <column name="description" type="STRING"/>
+    </loadData>
+  </changeSet>
+
+  <changeSet author="murali" id="1.0.13">
+    <loadData tableName="t_user" file="/db/changelog/data/security/user_v1_0.csv">
+      <column name="id" type="NUMERIC"/>
+      <column name="username" type="STRING"/>
+      <column name="first_name" type="STRING"/>
+      <column name="last_name" type="STRING"/>
+      <column name="email" type="STRING"/>
+      <column name="enabled" type="NUMERIC"/>
+      <column name="created_date" type="timestamp"/>
+      <column name="created_by" type="STRING" defaultValue="system"/>
+      <column name="last_modified_date" type="timestamp"/>
+      <column name="last_modified_by" type="STRING" defaultValue="system"/>
+      <column name="version" type="NUMERIC" defaultValueNumeric="1"/>
+    </loadData>
+  </changeSet>
+  <changeSet author="murali" id="1.0.14">
+    <loadData tableName="t_credential" file="/db/changelog/data/security/credential_v1_0.csv">
+      <column name="id" type="NUMERIC"/>
+      <column name="salt" type="STRING"/>
+      <column name="password" type="STRING"/>
+      <!-- Secret@123 -->
+      <column name="expiry_date" type="DATE"/>
+      <column name="invalid_attempts" type="NUMERIC"/>
+      <column name="locked" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+  <changeSet author="murali" id="1.0.15">
+    <loadData tableName="t_user_credential" file="/db/changelog/data/security/user_credential_v1_0.csv">
+      <column name="user_id" type="NUMERIC"/>
+      <column name="credential_id" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+  <changeSet author="murali" id="1.0.16">
+    <loadData tableName="sequence_table" file="/db/changelog/data/sequence_table_v1_0.csv">
+      <column name="seq_name" type="STRING"/>
+      <column name="seq_value" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+
+  <changeSet id="1.0.17" author="murali">
+    <createTable tableName="t_audit_event">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="principal" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="event_date" type="timestamp"/>
+      <column name="event_type" type="varchar(255)"/>
+    </createTable>
+
+    <createTable tableName="t_audit_event_data">
+      <column name="event_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="varchar(255)"/>
+    </createTable>
+    <addPrimaryKey columnNames="event_id, name" tableName="t_audit_event_data"/>
+
+    <createIndex indexName="idx_audit_event_01"
+                 tableName="t_audit_event"
+                 unique="false">
+      <column name="principal" type="varchar(255)"/>
+      <column name="event_date" type="timestamp"/>
+    </createIndex>
+
+    <createIndex indexName="idx_audit_event_data_01"
+                 tableName="t_audit_event_data"
+                 unique="false">
+      <column name="event_id" type="bigint"/>
+    </createIndex>
+
+    <addForeignKeyConstraint baseColumnNames="event_id"
+                             baseTableName="t_audit_event_data"
+                             constraintName="FK_audit_event_data_01"
+                             referencedColumnNames="id"
+                             referencedTableName="t_audit_event"/>
+  </changeSet>
+  <changeSet id="1.0.18" author="murali">
+    <createTable tableName="t_token">
+      <column name="series" type="varchar(255)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="bigint"/>
+      <column name="token_value" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="token_date" type="timestamp"/>
+      <column name="ip_address" type="varchar(39)"/>
+      <column name="user_agent" type="varchar(255)"/>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="user_id"
+                             baseTableName="t_token"
+                             constraintName="fk_user_persistent_token"
+                             referencedColumnNames="id"
+                             referencedTableName="t_user"/>
+
+  </changeSet>
+
+
+
+</databaseChangeLog>

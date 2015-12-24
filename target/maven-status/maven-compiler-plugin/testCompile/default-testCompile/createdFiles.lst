@@ -1,0 +1,3 @@
+com/mmrath/sapp/web/rest/TestUtil.class
+com/mmrath/sapp/security/SecurityUtilsUnitTest.class
+com/mmrath/sapp/web/rest/AuditResourceIntTest.class

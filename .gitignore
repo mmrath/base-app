@@ -1,0 +1,16 @@
+**/*.iml
+**/*.tmp
+/.idea
+/.gradle
+*/target/**
+*/build/**
+**/*.log
+**/.settings
+**/.classpath
+**/.project
+**/*.class
+**/bin
+**/lib
+**/src/main/generated
+**/node_modules/*
+.DS_Store

@@ -1,7 +1,7 @@
 **/*.iml
 **/*.tmp
-/.idea
-/.gradle
+.idea
+.gradle
 */target/**
 */build/**
 **/*.log
@@ -14,3 +14,4 @@
 **/src/main/generated
 **/node_modules/*
 .DS_Store
+target

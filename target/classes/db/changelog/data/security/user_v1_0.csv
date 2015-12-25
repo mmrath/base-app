@@ -1,2 +1,0 @@
-id,username,first_name,last_name,email,enabled,created_date,created_by,last_modified_date,last_modified_by,version
-1,system,SYSTEM,,system@test.com,1,2015-01-01T00:00:00,system,2015-01-01T00:00:00,system,1

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,13 +28,13 @@ public class RoleResource {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Page<Role> findRoles(Pageable pageRequest) {
+    public Page<Role> findAll(Pageable pageRequest) {
         return roleService.findAllRoles(pageRequest);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Role createRole(@RequestBody Role role) {
+    public Role create(@RequestBody Role role) {
         logger.info("Role {}", role);
         role = roleService.createRole(role);
         return role;
@@ -41,15 +42,22 @@ public class RoleResource {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Role updateRole(@PathVariable("id") Long id,
+    public Role update(@PathVariable("id") Long id,
                            @Valid @RequestBody Role role) {
         role = roleService.updateRole(role);
         return role;
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("id") Long id) {
+        roleService.deleteRole(id);
+    }
+
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Role findRole(@PathVariable("id") Long id) {
+    public Role findById(@PathVariable("id") Long id) {
         Role role = roleService.findRoleById(id);
         return role;
     }

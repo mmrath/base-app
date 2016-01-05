@@ -11,11 +11,11 @@ public class Permission implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "resource", nullable = false,
-            updatable = false, insertable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "resource_id", updatable = false, nullable = false)
     private Resource resource;
 
     @Enumerated(EnumType.STRING)
@@ -31,7 +31,7 @@ public class Permission implements Serializable {
     }
 
     public String getName() {
-        return resource.name() + ":" + accessLevel.name();
+        return resource.getName() + ":" + accessLevel.name();
     }
 
     @Override

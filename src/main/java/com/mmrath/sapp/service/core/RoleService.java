@@ -51,8 +51,8 @@ public class RoleService {
     }
 
     @Transactional
-    public void deleteRole(Role role) {
-        roleRepository.delete(role);
+    public void deleteRole(Long id) {
+        roleRepository.delete(id);
     }
 
     @Transactional

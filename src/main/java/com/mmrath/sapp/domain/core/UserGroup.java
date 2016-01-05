@@ -19,10 +19,7 @@ public class UserGroup extends AbstractAuditingEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @TableGenerator(name = "groupIdGen", table = "SEQUENCE_TABLE", pkColumnName = "SEQ_NAME",
-            valueColumnName = "SEQ_VALUE", pkColumnValue = "GROUP_ID_SEQ",
-            initialValue = 101, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "groupIdGen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(unique = true, nullable = false)

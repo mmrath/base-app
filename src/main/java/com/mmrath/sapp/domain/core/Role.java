@@ -27,10 +27,7 @@ public class Role extends AbstractAuditingEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @TableGenerator(name = "roleIdGen", table = "SEQUENCE_TABLE", pkColumnName = "SEQ_NAME",
-            valueColumnName = "SEQ_VALUE", pkColumnValue = "ROLE_ID_SEQ", initialValue = 101,
-            allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "roleIdGen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -42,11 +39,11 @@ public class Role extends AbstractAuditingEntity {
     @Size(min = 4, max = 64)
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "t_role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();
 
-    public List<String> getPermissionsAsString() {
+    private List<String> getPermissionsAsString() {
         List<String> perms = new ArrayList<>();
         for (Permission permission : permissions) {
             perms.add(permission.getName());

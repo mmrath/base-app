@@ -1,6 +1,7 @@
 package com.mmrath.sapp.web.errors;
 
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,13 @@ public class ExceptionTranslator {
     @ResponseBody
     public ErrorDTO processConcurencyError(ConcurrencyFailureException ex) {
         return new ErrorDTO(ErrorConstants.ERR_CONCURRENCY_FAILURE);
+    }
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorDTO processEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        return new ErrorDTO(ErrorConstants.ERR_NO_DATA_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

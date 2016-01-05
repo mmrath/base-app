@@ -13,9 +13,7 @@ public class Credential implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @TableGenerator(name = "credentialIdGen", table = "SEQUENCE_TABLE", pkColumnName = "SEQ_NAME",
-            valueColumnName = "SEQ_VALUE", pkColumnValue = "CREDENTIAL_ID_SEQ", initialValue = 101,
-            allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @JsonIgnore

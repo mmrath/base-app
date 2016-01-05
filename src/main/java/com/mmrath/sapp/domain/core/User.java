@@ -36,10 +36,7 @@ public class User extends AbstractAuditingEntity<Long> {
     public Credential credential;
 
     @Id
-    @TableGenerator(name = "userIdGen", table = "SEQUENCE_TABLE", pkColumnName = "SEQ_NAME",
-            valueColumnName = "SEQ_VALUE", pkColumnValue = "USER_ID_SEQ", initialValue = 101,
-            allocationSize = 10)
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "userIdGen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Pattern(regexp = "[\\w_\\.]+")

@@ -28,14 +28,14 @@ public class UserResource {
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   @ResponseBody
-  public User findUser(@PathVariable("id") Long id) {
+  public User findById(@PathVariable("id") Long id) {
     User user = userService.findUser(id);
     return user;
   }
 
   @RequestMapping(method = RequestMethod.GET)
   @ResponseBody
-  public Page<User> findUsers(String query, Pageable pageRequest) {
+  public Page<User> findAll(String query, Pageable pageRequest) {
     logger.info("Page request:{}", pageRequest);
     logger.info("User search criteria:{}", query);
     return userService.findUsers(RsqlUtils.parse(query),pageRequest);
@@ -43,7 +43,7 @@ public class UserResource {
 
   @RequestMapping(method = RequestMethod.POST)
   @ResponseBody
-  public User createUser(@Valid @RequestBody User user) {
+  public User create(@Valid @RequestBody User user) {
     logger.debug("User to create:{}", user);
     userService.createUser(user);
     return user;
@@ -51,7 +51,7 @@ public class UserResource {
 
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ResponseBody
-  public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+  public User update(@PathVariable("id") Long id, @RequestBody User user) {
     logger.debug("User to update:{}", user);
     user = userService.updateUser(user);
     return user;
@@ -59,7 +59,7 @@ public class UserResource {
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.OK)
-  public Long deleteUser(@PathVariable("id") Long id) {
+  public Long delete(@PathVariable("id") Long id) {
     logger.debug("User to delete:{}", id);
     return userService.deleteUser(id);
   }

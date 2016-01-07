@@ -17,50 +17,50 @@ import javax.validation.Valid;
 @RequestMapping("/api/admin/users")
 public class UserResource {
 
-  private final Logger logger = LoggerFactory.getLogger(UserResource.class);
+    private final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
-  private final UserService userService;
+    private final UserService userService;
 
-  @Autowired
-  public UserResource(UserService userService) {
-    this.userService = userService;
-  }
+    @Autowired
+    public UserResource(UserService userService) {
+        this.userService = userService;
+    }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  @ResponseBody
-  public User findById(@PathVariable("id") Long id) {
-    User user = userService.findUser(id);
-    return user;
-  }
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public User findById(@PathVariable("id") Long id) {
+        User user = userService.findUser(id);
+        return user;
+    }
 
-  @RequestMapping(method = RequestMethod.GET)
-  @ResponseBody
-  public Page<User> findAll(String query, Pageable pageRequest) {
-    logger.info("Page request:{}", pageRequest);
-    logger.info("User search criteria:{}", query);
-    return userService.findUsers(RsqlUtils.parse(query),pageRequest);
-  }
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public Page<User> findAll(String query, Pageable pageRequest) {
+        logger.info("Page request:{}", pageRequest);
+        logger.info("User search criteria:{}", query);
+        return userService.findUsers(RsqlUtils.parse(query), pageRequest);
+    }
 
-  @RequestMapping(method = RequestMethod.POST)
-  @ResponseBody
-  public User create(@Valid @RequestBody User user) {
-    logger.debug("User to create:{}", user);
-    userService.createUser(user);
-    return user;
-  }
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public User create(@Valid @RequestBody User user) {
+        logger.debug("User to create:{}", user);
+        userService.createUser(user);
+        return user;
+    }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-  @ResponseBody
-  public User update(@PathVariable("id") Long id, @RequestBody User user) {
-    logger.debug("User to update:{}", user);
-    user = userService.updateUser(user);
-    return user;
-  }
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public User update(@PathVariable("id") Long id, @RequestBody User user) {
+        logger.debug("User to update:{}", user);
+        user = userService.updateUser(user);
+        return user;
+    }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  @ResponseStatus(HttpStatus.OK)
-  public Long delete(@PathVariable("id") Long id) {
-    logger.debug("User to delete:{}", id);
-    return userService.deleteUser(id);
-  }
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public Long delete(@PathVariable("id") Long id) {
+        logger.debug("User to delete:{}", id);
+        return userService.deleteUser(id);
+    }
 }

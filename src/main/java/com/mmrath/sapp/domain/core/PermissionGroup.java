@@ -1,7 +1,9 @@
 package com.mmrath.sapp.domain.core;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 //This is DTO to hold list of permissions applicable on a Resource. This does not map to a table.
@@ -9,7 +11,7 @@ public class PermissionGroup implements Serializable {
 
     private final Resource resource;
 
-    private final Map<AccessLevel,Permission> permissions = new HashMap<>();
+    private final Map<AccessLevel, Permission> permissions = new HashMap<>();
 
     public PermissionGroup(Resource resource) {
         this.resource = resource;
@@ -30,7 +32,7 @@ public class PermissionGroup implements Serializable {
         return false;
     }
 
-    public Map<AccessLevel,Permission> getPermissions() {
+    public Map<AccessLevel, Permission> getPermissions() {
         return Collections.unmodifiableMap(permissions);
     }
 }

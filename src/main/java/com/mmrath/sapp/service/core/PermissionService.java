@@ -2,7 +2,6 @@ package com.mmrath.sapp.service.core;
 
 import com.mmrath.sapp.domain.core.AccessLevel;
 import com.mmrath.sapp.domain.core.Permission;
-import com.mmrath.sapp.domain.core.Resource;
 import com.mmrath.sapp.repository.core.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -27,16 +26,16 @@ public class PermissionService {
         return permissionRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
     }
 
-    public Map<Resource, Map<AccessLevel, Permission>> findPermissionGroups() {
-        Map<Resource, Map<AccessLevel, Permission>> permissionGroups = new TreeMap<>();
+    public Map<Long, Map<AccessLevel, Permission>> findPermissionGroups() {
+        Map<Long, Map<AccessLevel, Permission>> permissionGroups = new TreeMap<>();
 
         List<Permission> permissions = permissionRepository.findAll(new Sort(Sort.Direction.ASC, "resource", "id"));
         permissions.forEach(
                 permission -> {
-                    if (!permissionGroups.containsKey(permission.getResource())) {
-                        permissionGroups.put(permission.getResource(), new HashMap<>());
+                    if (!permissionGroups.containsKey(permission.getResource().getId())) {
+                        permissionGroups.put(permission.getResource().getId(), new HashMap<>());
                     }
-                    permissionGroups.get(permission.getResource()).put(permission.getAccessLevel(), permission);
+                    permissionGroups.get(permission.getResource().getId()).put(permission.getAccessLevel(), permission);
                 });
 
 

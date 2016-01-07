@@ -43,7 +43,7 @@ public class RoleResource {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public Role update(@PathVariable("id") Long id,
-                           @Valid @RequestBody Role role) {
+                       @Valid @RequestBody Role role) {
         role = roleService.updateRole(role);
         return role;
     }

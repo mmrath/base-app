@@ -12,16 +12,16 @@ import java.util.Optional;
  */
 public class RsqlUtils {
 
-    public static <T> Optional<Specification<T>> parse(String search, RsqlVisitor<T> visitor){
+    public static <T> Optional<Specification<T>> parse(String search, RsqlVisitor<T> visitor) {
         Specification<T> spec = null;
-        if(StringUtils.hasText(search)) {
+        if (StringUtils.hasText(search)) {
             Node rootNode = new RSQLParser().parse(search);
             spec = rootNode.accept(new RsqlVisitor<>());
         }
         return Optional.ofNullable(spec);
     }
 
-    public static <T> Optional<Specification<T>> parse(String search){
+    public static <T> Optional<Specification<T>> parse(String search) {
         return parse(search, new RsqlVisitor<>());
     }
 }

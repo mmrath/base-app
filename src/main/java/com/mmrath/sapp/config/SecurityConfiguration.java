@@ -52,14 +52,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-            .antMatchers("/scripts/**/*.{js,html}")
-            .antMatchers("/bower_components/**")
-            .antMatchers("/i18n/**")
-            .antMatchers("/assets/**")
-            .antMatchers("/swagger-ui/index.html")
-            .antMatchers("/test/**")
-            .antMatchers("/console/**");
-        if(env.acceptsProfiles("local")){
+                .antMatchers("/scripts/**/*.{js,html}")
+                .antMatchers("/bower_components/**")
+                .antMatchers("/i18n/**")
+                .antMatchers("/assets/**")
+                .antMatchers("/swagger-ui/index.html")
+                .antMatchers("/test/**")
+                .antMatchers("/console/**");
+        if (env.acceptsProfiles("local")) {
             //http.authorizeRequests()
             //  .antMatchers("/api/**").hasIpAddress("127.0.0.1");
             web.ignoring().antMatchers("/api/**");
@@ -69,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        if(env.acceptsProfiles("local")){
+        if (env.acceptsProfiles("local")) {
             //http.authorizeRequests()
             //    .antMatchers("/api/**").hasIpAddress("127.0.0.1");
             return;

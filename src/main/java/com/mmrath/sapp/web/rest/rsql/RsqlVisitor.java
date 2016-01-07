@@ -1,6 +1,9 @@
 package com.mmrath.sapp.web.rest.rsql;
 
-import cz.jirutka.rsql.parser.ast.*;
+import cz.jirutka.rsql.parser.ast.AndNode;
+import cz.jirutka.rsql.parser.ast.ComparisonNode;
+import cz.jirutka.rsql.parser.ast.NoArgRSQLVisitorAdapter;
+import cz.jirutka.rsql.parser.ast.OrNode;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -9,9 +12,10 @@ import org.springframework.data.jpa.domain.Specification;
 public class RsqlVisitor<T> extends NoArgRSQLVisitorAdapter<Specification<T>> {
     private final RsqlSpecificationBuilder<T> builder;
 
-    public RsqlVisitor(){
+    public RsqlVisitor() {
         this(new RsqlSpecificationBuilder<T>());
     }
+
     public RsqlVisitor(RsqlSpecificationBuilder<T> builder) {
         this.builder = builder;
     }

@@ -33,7 +33,7 @@ public class PermissionResource {
     }
 
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
-    public Map<Resource, Map<AccessLevel, Permission>> getPermissionGroups() {
+    public Map<Long, Map<AccessLevel, Permission>> getPermissionGroups() {
         return permissionService.findPermissionGroups();
     }
 

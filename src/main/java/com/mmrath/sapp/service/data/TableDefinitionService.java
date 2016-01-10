@@ -1,8 +1,8 @@
 package com.mmrath.sapp.service.data;
 
-import com.mmrath.sapp.domain.data.TableDefinition;
-import com.mmrath.sapp.repository.data.ColumnDefinitionRepository;
-import com.mmrath.sapp.repository.data.TableDefinitionRepository;
+import com.mmrath.sapp.domain.data.TableDef;
+import com.mmrath.sapp.repository.data.ColumnDefRepository;
+import com.mmrath.sapp.repository.data.TableDefRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 public class TableDefinitionService {
 
     @Autowired
-    private ColumnDefinitionRepository columnDefinitionRepository;
+    private ColumnDefRepository columnDefRepository;
 
     @Autowired
-    private TableDefinitionRepository tableDefinitionRepository;
+    private TableDefRepository tableDefRepository;
 
-    public void save(TableDefinition tableDefinition) {
-        tableDefinitionRepository.save(tableDefinition);
+    public void save(TableDef tableDef) {
+        tableDefRepository.save(tableDef);
     }
 
-    public void delete(TableDefinition tableDefinition) {
-        tableDefinitionRepository.delete(tableDefinition);
+    public void delete(TableDef tableDef) {
+        tableDefRepository.delete(tableDef);
     }
 
 }

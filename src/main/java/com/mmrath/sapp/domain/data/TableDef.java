@@ -9,12 +9,19 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "t_table_definition")
-public class TableDefinition extends AbstractAuditingEntity<Long> {
+@Table(name = "t_table_def")
+public class TableDef extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+
+    @Pattern(regexp = "[a-z0-9-]{3,25}", message = "Table tag can only contain lower case letters, number and hyphen")
+    @NotNull
+    @Size(min = 3, max = 25, message = "Table tag must be of length between {min} and {max} characters")
+    @Column(name = "tag_id", nullable = false, length = 32, unique = true)
+    private String tagId;
 
     @Pattern(regexp = "[A-Za-z0-9_]*")
     @NotNull
@@ -39,7 +46,23 @@ public class TableDefinition extends AbstractAuditingEntity<Long> {
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "table_id")
-    private List<ColumnDefinition> columns;
+    private List<ColumnDef> columns;
+
+    @Transient
+    private ColumnDef primaryKeyColumn;
+
+    public ColumnDef getPrimaryKeyColumn() {
+        if (this.columns != null) {
+            for (ColumnDef columnDef : columns) {
+                if (columnDef.getColumnType() == ColumnType.PRIMARY_KEY) {
+                    return columnDef;
+                }
+            }
+        }
+        return null;
+    }
+
+
 
     @Override
     public Long getId() {
@@ -48,6 +71,14 @@ public class TableDefinition extends AbstractAuditingEntity<Long> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
     }
 
     public String getTableName() {
@@ -98,11 +129,11 @@ public class TableDefinition extends AbstractAuditingEntity<Long> {
         this.multiSelectable = multiSelectable;
     }
 
-    public List<ColumnDefinition> getColumns() {
+    public List<ColumnDef> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<ColumnDefinition> columns) {
+    public void setColumns(List<ColumnDef> columns) {
         this.columns = columns;
     }
 }

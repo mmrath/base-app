@@ -5,9 +5,11 @@ import com.mmrath.sapp.domain.AbstractAuditingEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Model object that represents a security role.
@@ -32,11 +34,12 @@ public class Role extends AbstractAuditingEntity {
 
     @Column(unique = true, nullable = false)
     @NotNull
-    @Size(min = 4, max = 30)
+    @Size(min = 4, max = 30, message = "Role name must be between {min} to {max} character long")
+    @Pattern(regexp = "[a-zA-Z_]+", message = "Role name can only contain letters, digits and underscore(_)")
     private String name;
 
     @NotNull
-    @Size(min = 4, max = 64)
+    @Size(min = 4, max = 64, message = "Role description must be between {min} to {max} character long")
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -44,10 +47,7 @@ public class Role extends AbstractAuditingEntity {
     private List<Permission> permissions = new ArrayList<>();
 
     private List<String> getPermissionsAsString() {
-        List<String> perms = new ArrayList<>();
-        for (Permission permission : permissions) {
-            perms.add(permission.getName());
-        }
+        List<String> perms = permissions.stream().map(Permission::getName).collect(Collectors.toList());
         return perms;
     }
 

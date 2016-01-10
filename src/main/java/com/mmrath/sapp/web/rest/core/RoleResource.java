@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/roles")
+@RequestMapping("/api/core/roles")
 public class RoleResource {
 
     private final Logger logger = LoggerFactory.getLogger(RoleResource.class);
@@ -34,7 +34,7 @@ public class RoleResource {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Role create(@RequestBody Role role) {
+    public Role create(@RequestBody @Valid Role role) {
         logger.info("Role {}", role);
         role = roleService.createRole(role);
         return role;

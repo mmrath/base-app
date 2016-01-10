@@ -114,6 +114,8 @@ public class DatabaseConfiguration {
 
     @Bean
     public Hibernate4Module hibernate4Module() {
-        return new Hibernate4Module();
+        Hibernate4Module module = new Hibernate4Module();
+        module.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
+        return module;
     }
 }

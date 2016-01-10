@@ -4,10 +4,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-/**
- * Created by murali on 6/01/2016.
- */
-public class ColumnDefinitionsValidator implements ConstraintValidator<ValidColumnDefinitions, List<ColumnDefinition>> {
+public class ColumnDefinitionsValidator implements ConstraintValidator<ValidColumnDefinitions, List<ColumnDef>> {
 
     @Override
     public void initialize(ValidColumnDefinitions validColumnDefinitions) {
@@ -15,7 +12,7 @@ public class ColumnDefinitionsValidator implements ConstraintValidator<ValidColu
     }
 
     @Override
-    public boolean isValid(List<ColumnDefinition> columnDefinitions, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(List<ColumnDef> columnDefinitions, ConstraintValidatorContext constraintValidatorContext) {
         return true;
     }
 }

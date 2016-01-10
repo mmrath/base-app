@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/permissions")
+@RequestMapping("/api/core/permissions")
 public class PermissionResource {
 
     private final PermissionService permissionService;

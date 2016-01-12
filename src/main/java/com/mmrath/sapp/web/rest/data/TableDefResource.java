@@ -3,6 +3,7 @@ package com.mmrath.sapp.web.rest.data;
 
 import com.mmrath.sapp.domain.data.TableDef;
 import com.mmrath.sapp.repository.data.TableDefRepository;
+import com.mmrath.sapp.service.data.TableDefService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TableDefResource {
 
     @Autowired
     private TableDefRepository tableDefRepository;
+
+    @Autowired
+    private TableDefService tableDefService;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody

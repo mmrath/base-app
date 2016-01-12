@@ -20,6 +20,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SecurityUtilsUnitTest {
 
     @Test
+    public void testPattern() {
+        String tableNamePattern = "\\w+";
+        assertThat("t_rol4e".matches(tableNamePattern)).isTrue();
+        assertThat("role3".matches(tableNamePattern)).isTrue();
+        assertThat("t_Role".matches(tableNamePattern)).isTrue();
+        assertThat("R_ROL2E".matches(tableNamePattern)).isTrue();
+        assertThat("R_ROLE1".matches(tableNamePattern)).isTrue();
+        assertThat("R_ROLE%".matches(tableNamePattern)).isFalse();
+    }
+
+    @Test
     public void testgetCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));

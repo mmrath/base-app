@@ -26,11 +26,11 @@ public class TableDef extends AbstractAuditingEntity<Long> {
     @Pattern(regexp = "[A-Za-z0-9_]*")
     @NotNull
     @Size(min = 3, max = 64)
-    @Column(name = "table_name", nullable = false, length = 64, unique = true)
-    private String tableName;
+    @Column(name = "name", nullable = false, length = 64, unique = true)
+    private String name;
 
-    @Column(name = "display_name", nullable = false, length = 128)
-    private String displayName;
+    @Column(name = "display_label", nullable = false, length = 128)
+    private String displayLabel;
 
     @Column(name = "insertable", nullable = false)
     private Boolean insertable;
@@ -62,7 +62,21 @@ public class TableDef extends AbstractAuditingEntity<Long> {
         return null;
     }
 
-
+    @Override
+    public String toString() {
+        return "TableDef{" +
+                "id=" + id +
+                ", tagId='" + tagId + '\'' +
+                ", name='" + name + '\'' +
+                ", displayLabel='" + displayLabel + '\'' +
+                ", insertable=" + insertable +
+                ", updatable=" + updatable +
+                ", deletable=" + deletable +
+                ", multiSelectable=" + multiSelectable +
+                ", columns=" + columns +
+                ", primaryKeyColumn=" + primaryKeyColumn +
+                '}';
+    }
 
     @Override
     public Long getId() {
@@ -81,20 +95,20 @@ public class TableDef extends AbstractAuditingEntity<Long> {
         this.tagId = tagId;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getName() {
+        return name;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayLabel() {
+        return displayLabel;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setDisplayLabel(String displayLabel) {
+        this.displayLabel = displayLabel;
     }
 
     public Boolean getInsertable() {

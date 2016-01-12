@@ -6,14 +6,17 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
     <changeSet id="1.1.0" author="murali">
-        <createTable tableName="t_table_definition">
+        <createTable tableName="t_table_def">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="table_name" type="VARCHAR(64)">
+            <column name="name" type="VARCHAR(64)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="display_name" type="VARCHAR(64)">
+            <column name="tag_id" type="VARCHAR(32)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="display_label" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="insertable" type="BOOLEAN">
@@ -46,23 +49,23 @@
             </column>
         </createTable>
 
-        <createTable tableName="t_column_definition">
+        <createTable tableName="t_column_def">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="table_id" type="bigint">
                 <constraints foreignKeyName="t_col_def_fk1"
-                             referencedTableName="t_table_definition"
+                             referencedTableName="t_table_def"
                              referencedColumnNames="id"
                              nullable="false"/>
             </column>
-            <column name="column_index" type="INTEGER">
+            <column name="index" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-            <column name="column_name" type="VARCHAR(64)">
+            <column name="name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_name" type="VARCHAR(64)">
+            <column name="display_label" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="data_type" type="VARCHAR(64)">
@@ -89,26 +92,27 @@
             <column name="sortable" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="visible_in_list" type="BOOLEAN">
+            <column name="show_in_list" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-
             <column name="length" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="data_cell_template" type="VARCHAR(511)"/>
-            <column name="header_cell_template" type="VARCHAR(511)"/>
+            <column name="data_template" type="VARCHAR(511)"/>
+            <column name="header_template" type="VARCHAR(511)"/>
             <column name="valid_pattern" type="VARCHAR(255)"/>
             <column name="valid_pattern_message" type="VARCHAR(511)"/>
             <column name="default_value" type="VARCHAR(255)"/>
 
         </createTable>
-        <addUniqueConstraint constraintName="column_def_uk1" tableName="t_column_definition"
-                             columnNames="table_id,column_name"/>
-        <addUniqueConstraint constraintName="column_def_uk2" tableName="t_column_definition"
-                             columnNames="table_id,column_index"/>
+        <addUniqueConstraint constraintName="column_def_uk1" tableName="t_column_def"
+                             columnNames="table_id,name"/>
+        <addUniqueConstraint constraintName="column_def_uk2" tableName="t_column_def"
+                             columnNames="table_id,index"/>
+    </changeSet>
+
+    <changeSet id="1.0.19" author="murali">
+        <sqlFile path="data/table_def/table_def_v1.0.sql" relativeToChangelogFile="true"></sqlFile>
     </changeSet>
 
 </databaseChangeLog>

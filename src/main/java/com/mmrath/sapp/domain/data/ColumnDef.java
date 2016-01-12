@@ -3,25 +3,26 @@ package com.mmrath.sapp.domain.data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "t_column_def")
-public class ColumnDef {
+public class ColumnDef implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Column(name = "column_index", nullable = false)
-    private Integer columnIndex;
+    @Column(name = "index", nullable = false)
+    private Integer index;
 
     @Pattern(regexp = "[a-zA-Z0-9_]+")
-    @Column(name = "column_name", nullable = false, length = 64)
-    private String columnName;
+    @Column(name = "name", nullable = false, length = 64)
+    private String name;
 
-    @Column(name = "display_name", nullable = false, length = 64)
-    private String displayName;
+    @Column(name = "display_label", nullable = false, length = 64)
+    private String displayLabel;
 
     @Column(name = "nullable", nullable = false)
     private Boolean nullable;
@@ -39,25 +40,25 @@ public class ColumnDef {
     private Boolean sortable;
 
     @Column(name = "visible_in_list", nullable = false)
-    private Boolean visibleInList;
+    private Boolean showInList;
 
     @Column(name = "data_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private DataType dataType;
 
     //Audit or version column type
-    @Column(name = "column_type")
+    @Column(name = "column_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private ColumnType columnType;
 
     @Column(name = "length")
     private Integer length;//Data type Length
 
-    @Column(name = "data_cell_template", length = 511)
-    private String dataCellTemplate;
+    @Column(name = "data_template", length = 511)
+    private String dataTemplate;
 
-    @Column(name = "header_cell_template", length = 511)
-    private String headerCellTemplate;
+    @Column(name = "header_template", length = 511)
+    private String headerTemplate;
 
     @Column(name = "valid_pattern", length = 255)
     private String validPattern;
@@ -69,6 +70,30 @@ public class ColumnDef {
     private String defaultValue;
 
 
+    @Override
+    public String toString() {
+        return "ColumnDef{" +
+                "id=" + id +
+                ", index=" + index +
+                ", name='" + name + '\'' +
+                ", displayLabel='" + displayLabel + '\'' +
+                ", nullable=" + nullable +
+                ", insertable=" + insertable +
+                ", updatable=" + updatable +
+                ", searchable=" + searchable +
+                ", sortable=" + sortable +
+                ", showInList=" + showInList +
+                ", dataType=" + dataType +
+                ", columnType=" + columnType +
+                ", length=" + length +
+                ", dataTemplate='" + dataTemplate + '\'' +
+                ", headerTemplate='" + headerTemplate + '\'' +
+                ", validPattern='" + validPattern + '\'' +
+                ", validPatternMessage='" + validPatternMessage + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
@@ -77,28 +102,28 @@ public class ColumnDef {
         this.id = id;
     }
 
-    public Integer getColumnIndex() {
-        return columnIndex;
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setColumnIndex(Integer columnIndex) {
-        this.columnIndex = columnIndex;
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
-    public String getColumnName() {
-        return columnName;
+    public String getName() {
+        return name;
     }
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayLabel() {
+        return displayLabel;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setDisplayLabel(String displayLabel) {
+        this.displayLabel = displayLabel;
     }
 
     public Boolean getNullable() {
@@ -141,12 +166,12 @@ public class ColumnDef {
         this.sortable = sortable;
     }
 
-    public Boolean getVisibleInList() {
-        return visibleInList;
+    public Boolean getShowInList() {
+        return showInList;
     }
 
-    public void setVisibleInList(Boolean visibleInList) {
-        this.visibleInList = visibleInList;
+    public void setShowInList(Boolean showInList) {
+        this.showInList = showInList;
     }
 
     public DataType getDataType() {
@@ -173,20 +198,20 @@ public class ColumnDef {
         this.length = length;
     }
 
-    public String getDataCellTemplate() {
-        return dataCellTemplate;
+    public String getDataTemplate() {
+        return dataTemplate;
     }
 
-    public void setDataCellTemplate(String dataCellTemplate) {
-        this.dataCellTemplate = dataCellTemplate;
+    public void setDataTemplate(String dataTemplate) {
+        this.dataTemplate = dataTemplate;
     }
 
-    public String getHeaderCellTemplate() {
-        return headerCellTemplate;
+    public String getHeaderTemplate() {
+        return headerTemplate;
     }
 
-    public void setHeaderCellTemplate(String headerCellTemplate) {
-        this.headerCellTemplate = headerCellTemplate;
+    public void setHeaderTemplate(String headerTemplate) {
+        this.headerTemplate = headerTemplate;
     }
 
     public String getValidPattern() {

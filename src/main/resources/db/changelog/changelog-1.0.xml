@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
@@ -320,7 +320,7 @@
     </changeSet>
 
 
-
+    <!--
     <changeSet author="murali" id="1.0.13">
         <loadData tableName="t_user" file="/db/changelog/data/security/user_v1_0.csv">
             <column name="id" type="NUMERIC"/>
@@ -341,7 +341,7 @@
             <column name="id" type="NUMERIC"/>
             <column name="salt" type="STRING"/>
             <column name="password" type="STRING"/>
-            <!-- Secret@123 -->
+            &lt;!&ndash; Secret@123 &ndash;&gt;
             <column name="expiry_date" type="DATE"/>
             <column name="invalid_attempts" type="NUMERIC"/>
             <column name="locked" type="NUMERIC"/>
@@ -353,7 +353,7 @@
             <column name="credential_id" type="NUMERIC"/>
         </loadData>
     </changeSet>
-
+-->
     <changeSet id="1.0.17" author="murali">
         <createTable tableName="t_audit_event">
             <column name="id" type="bigint" autoIncrement="true">

@@ -1,18 +1,18 @@
 package com.mmrath.sapp.domain.util;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+
 /**
- * Custom Jackson deserializer for transforming a JSON object (using the ISO 8601 date formatwith optional time)
- * to a JSR310 LocalDate object.
+ * Custom Jackson deserializer for transforming a JSON object (using the ISO 8601 date formatwith
+ * optional time) to a JSR310 LocalDate object.
  */
 public class JSR310LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
@@ -21,18 +21,15 @@ public class JSR310LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
     static {
         ISO_DATE_OPTIONAL_TIME = new DateTimeFormatterBuilder()
-                .append(DateTimeFormatter.ISO_LOCAL_DATE)
-                .optionalStart()
-                .appendLiteral('T')
-                .append(DateTimeFormatter.ISO_OFFSET_TIME)
-                .toFormatter();
+                .append(DateTimeFormatter.ISO_LOCAL_DATE).optionalStart().appendLiteral('T')
+                .append(DateTimeFormatter.ISO_OFFSET_TIME).toFormatter();
     }
 
-    private JSR310LocalDateDeserializer() {
-    }
+    private JSR310LocalDateDeserializer() {}
 
     @Override
-    public LocalDate deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+    public LocalDate deserialize(JsonParser parser, DeserializationContext context)
+            throws IOException {
         switch (parser.getCurrentToken()) {
             case START_ARRAY:
                 if (parser.nextToken() == JsonToken.END_ARRAY) {
@@ -47,7 +44,8 @@ public class JSR310LocalDateDeserializer extends JsonDeserializer<LocalDate> {
                 int day = parser.getIntValue();
 
                 if (parser.nextToken() != JsonToken.END_ARRAY) {
-                    throw context.wrongTokenException(parser, JsonToken.END_ARRAY, "Expected array to end.");
+                    throw context.wrongTokenException(parser, JsonToken.END_ARRAY,
+                            "Expected array to end.");
                 }
                 return LocalDate.of(year, month, day);
 
@@ -57,7 +55,10 @@ public class JSR310LocalDateDeserializer extends JsonDeserializer<LocalDate> {
                     return null;
                 }
                 return LocalDate.parse(string, ISO_DATE_OPTIONAL_TIME);
+            default:
+                break;
         }
-        throw context.wrongTokenException(parser, JsonToken.START_ARRAY, "Expected array or string.");
+        throw context.wrongTokenException(parser, JsonToken.START_ARRAY,
+                "Expected array or string.");
     }
 }

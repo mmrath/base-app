@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
@@ -24,21 +25,28 @@ public class ExceptionTranslator {
     @ExceptionHandler(ConcurrencyFailureException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    public ErrorDTO processConcurencyError(ConcurrencyFailureException ex) {
-        return new ErrorDTO(ErrorConstants.ERR_CONCURRENCY_FAILURE);
+    public ErrorData processConcurencyError(ConcurrencyFailureException ex) {
+        return new ErrorData(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorDTO processEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
-        return new ErrorDTO(ErrorConstants.ERR_NO_DATA_FOUND);
+    public ErrorData processEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        return new ErrorData(ErrorConstants.ERR_NO_DATA_FOUND);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorData processNoSuchElementException(NoSuchElementException ex) {
+        return new ErrorData(ErrorConstants.ERR_NO_DATA_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO processValidationError(MethodArgumentNotValidException ex) {
+    public ErrorData processValidationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
 
@@ -48,19 +56,19 @@ public class ExceptionTranslator {
     @ExceptionHandler(CustomParameterizedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ParameterizedErrorDTO processParameterizedValidationError(CustomParameterizedException ex) {
+    public ParameterizedErrorData processParameterizedValidationError(CustomParameterizedException ex) {
         return ex.getErrorDTO();
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public ErrorDTO processAccessDeniedExcpetion(AccessDeniedException e) {
-        return new ErrorDTO(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
+    public ErrorData processAccessDeniedExcpetion(AccessDeniedException e) {
+        return new ErrorData(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
     }
 
-    private ErrorDTO processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorDTO dto = new ErrorDTO(ErrorConstants.ERR_VALIDATION);
+    private ErrorData processFieldErrors(List<FieldError> fieldErrors) {
+        ErrorData dto = new ErrorData(ErrorConstants.ERR_VALIDATION);
 
         for (FieldError fieldError : fieldErrors) {
             dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
@@ -72,7 +80,7 @@ public class ExceptionTranslator {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorDTO processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return new ErrorDTO(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
+    public ErrorData processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+        return new ErrorData(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
     }
 }

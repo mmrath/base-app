@@ -1,13 +1,23 @@
 package com.mmrath.sapp.domain.data;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "t_column_def")
 public class ColumnDef implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,20 +49,20 @@ public class ColumnDef implements Serializable {
     @Column(name = "sortable", nullable = false)
     private Boolean sortable;
 
-    @Column(name = "visible_in_list", nullable = false)
+    @Column(name = "show_in_list", nullable = false)
     private Boolean showInList;
 
     @Column(name = "data_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private DataType dataType;
 
-    //Audit or version column type
+    // Audit or version column type
     @Column(name = "column_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private ColumnType columnType;
 
     @Column(name = "length")
-    private Integer length;//Data type Length
+    private Integer length;// Data type Length
 
     @Column(name = "data_template", length = 511)
     private String dataTemplate;
@@ -72,26 +82,14 @@ public class ColumnDef implements Serializable {
 
     @Override
     public String toString() {
-        return "ColumnDef{" +
-                "id=" + id +
-                ", index=" + index +
-                ", name='" + name + '\'' +
-                ", displayLabel='" + displayLabel + '\'' +
-                ", nullable=" + nullable +
-                ", insertable=" + insertable +
-                ", updatable=" + updatable +
-                ", searchable=" + searchable +
-                ", sortable=" + sortable +
-                ", showInList=" + showInList +
-                ", dataType=" + dataType +
-                ", columnType=" + columnType +
-                ", length=" + length +
-                ", dataTemplate='" + dataTemplate + '\'' +
-                ", headerTemplate='" + headerTemplate + '\'' +
-                ", validPattern='" + validPattern + '\'' +
-                ", validPatternMessage='" + validPatternMessage + '\'' +
-                ", defaultValue='" + defaultValue + '\'' +
-                '}';
+        return "ColumnDef{" + "id=" + id + ", index=" + index + ", name='" + name + '\''
+                + ", displayLabel='" + displayLabel + '\'' + ", nullable=" + nullable
+                + ", insertable=" + insertable + ", updatable=" + updatable + ", searchable="
+                + searchable + ", sortable=" + sortable + ", showInList=" + showInList
+                + ", dataType=" + dataType + ", columnType=" + columnType + ", length=" + length
+                + ", dataTemplate='" + dataTemplate + '\'' + ", headerTemplate='" + headerTemplate
+                + '\'' + ", validPattern='" + validPattern + '\'' + ", validPatternMessage='"
+                + validPatternMessage + '\'' + ", defaultValue='" + defaultValue + '\'' + '}';
     }
 
     public Long getId() {

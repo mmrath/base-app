@@ -7,25 +7,25 @@ import java.util.List;
 /**
  * DTO for transfering error message with a list of field errors.
  */
-public class ErrorDTO implements Serializable {
+public class ErrorData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final String message;
     private final String description;
 
-    private List<FieldErrorDTO> fieldErrors;
+    private List<FieldErrorData> fieldErrors;
 
-    ErrorDTO(String message) {
+    ErrorData(String message) {
         this(message, null);
     }
 
-    ErrorDTO(String message, String description) {
+    ErrorData(String message, String description) {
         this.message = message;
         this.description = description;
     }
 
-    ErrorDTO(String message, String description, List<FieldErrorDTO> fieldErrors) {
+    ErrorData(String message, String description, List<FieldErrorData> fieldErrors) {
         this.message = message;
         this.description = description;
         this.fieldErrors = fieldErrors;
@@ -35,7 +35,7 @@ public class ErrorDTO implements Serializable {
         if (fieldErrors == null) {
             fieldErrors = new ArrayList<>();
         }
-        fieldErrors.add(new FieldErrorDTO(objectName, field, message));
+        fieldErrors.add(new FieldErrorData(objectName, field, message));
     }
 
     public String getMessage() {
@@ -46,7 +46,7 @@ public class ErrorDTO implements Serializable {
         return description;
     }
 
-    public List<FieldErrorDTO> getFieldErrors() {
+    public List<FieldErrorData> getFieldErrors() {
         return fieldErrors;
     }
 }

@@ -1,29 +1,43 @@
 package com.mmrath.sapp.web.rest.data;
 
 
-import com.mmrath.sapp.domain.data.TableDef;
-import com.mmrath.sapp.repository.data.TableDefRepository;
-import com.mmrath.sapp.service.data.TableDefService;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.mmrath.sapp.domain.data.TableDef;
+import com.mmrath.sapp.repository.data.TableDefRepository;
+import com.mmrath.sapp.service.data.TableDefService;
 
 @RestController
 @RequestMapping("/api/table")
 public class TableDefResource {
     private final Logger logger = LoggerFactory.getLogger(TableDefResource.class);
 
-    @Autowired
-    private TableDefRepository tableDefRepository;
+    private final TableDefRepository tableDefRepository;
+
+    private final TableDefService tableDefService;
 
     @Autowired
-    private TableDefService tableDefService;
+    public TableDefResource(TableDefRepository tableDefRepository,
+            TableDefService tableDefService) {
+        this.tableDefRepository = tableDefRepository;
+        this.tableDefService = tableDefService;
+    }
+
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -48,8 +62,7 @@ public class TableDefResource {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public TableDef update(@PathVariable("id") Long id,
-                           @Valid @RequestBody TableDef tableDef) {
+    public TableDef update(@PathVariable("id") Long id, @Valid @RequestBody TableDef tableDef) {
         tableDef = tableDefRepository.save(tableDef);
         return tableDef;
     }
@@ -59,5 +72,12 @@ public class TableDefResource {
     public void delete(@PathVariable("id") Long id) {
         tableDefRepository.delete(id);
     }
+
+    @RequestMapping(value = "/search/name", method = RequestMethod.GET)
+    @ResponseBody
+    public TableDef searchByName(@RequestParam("name") String name) {
+        return tableDefService.getTableDefFromDb(name).get();
+    }
+
 
 }

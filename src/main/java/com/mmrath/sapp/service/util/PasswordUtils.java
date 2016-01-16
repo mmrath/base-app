@@ -1,7 +1,6 @@
 package com.mmrath.sapp.service.util;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -9,11 +8,9 @@ import java.util.Base64;
 import java.util.Random;
 
 /**
- * Created by Murali on 11/17/13.
+ * Created by Murali
  */
 public abstract class PasswordUtils {
-
-    private static final Charset CHARSET = Charset.forName("UTF-8");
 
     private static final String ALGORITHM = "SHA-256";
 
@@ -44,15 +41,15 @@ public abstract class PasswordUtils {
     }
 
     public static final boolean isPasswordValid(String encodedPassword, String password,
-                                                String salt) {
+            String salt) {
 
         String passwordSaltedEncoded = encodePassword(password, salt);
         return encodedPassword.equals(passwordSaltedEncoded);
     }
 
     /**
-     * Get a MessageDigest instance for the given algorithm.
-     * Throws an IllegalArgumentException if <i>algorithm</i> is unknown
+     * Get a MessageDigest instance for the given algorithm. Throws an IllegalArgumentException if
+     * <i>algorithm</i> is unknown
      *
      * @return MessageDigest instance
      * @throws IllegalArgumentException if NoSuchAlgorithmException is thrown

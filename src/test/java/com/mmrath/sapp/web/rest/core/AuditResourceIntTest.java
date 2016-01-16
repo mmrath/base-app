@@ -1,4 +1,4 @@
-package com.mmrath.sapp.web.rest;
+package com.mmrath.sapp.web.rest.core;
 
 import com.mmrath.sapp.Application;
 import com.mmrath.sapp.config.audit.AuditEventConverter;

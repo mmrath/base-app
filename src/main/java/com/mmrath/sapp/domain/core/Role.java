@@ -1,15 +1,27 @@
 package com.mmrath.sapp.domain.core;
 
 
-import com.mmrath.sapp.domain.AbstractAuditingEntity;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import com.mmrath.sapp.domain.AbstractAuditingEntity;
 
 /**
  * Model object that represents a security role.
@@ -18,9 +30,11 @@ import java.util.stream.Collectors;
 @Cacheable
 @Table(name = "t_role")
 @NamedQueries({
-        @NamedQuery(name = Role.QUERY_GET_PERMISSIONS, query = "SELECT p FROM Permission p,Role t where p member of t.permissions and t.id = :id"),
-        @NamedQuery(name = Role.QUERY_GET_UNASSIGNED_PERMISSIONS, query = "SELECT p FROM Permission p,Role t where p not member of t.permissions and t.id = :id")})
-public class Role extends AbstractAuditingEntity {
+        @NamedQuery(name = Role.QUERY_GET_PERMISSIONS,
+                query = "SELECT p FROM Permission p,Role t where p member of t.permissions and t.id = :id"),
+        @NamedQuery(name = Role.QUERY_GET_UNASSIGNED_PERMISSIONS,
+                query = "SELECT p FROM Permission p,Role t where p not member of t.permissions and t.id = :id")})
+public class Role extends AbstractAuditingEntity<Long> {
 
     public static final String QUERY_GET_PERMISSIONS = "Role.getPermissions";
 
@@ -35,30 +49,24 @@ public class Role extends AbstractAuditingEntity {
     @Column(unique = true, nullable = false)
     @NotNull
     @Size(min = 4, max = 30, message = "Role name must be between {min} to {max} character long")
-    @Pattern(regexp = "[a-zA-Z_]+", message = "Role name can only contain letters, digits and underscore(_)")
+    @Pattern(regexp = "[a-zA-Z_]+",
+            message = "Role name can only contain letters, digits and underscore(_)")
     private String name;
 
     @NotNull
-    @Size(min = 4, max = 64, message = "Role description must be between {min} to {max} character long")
+    @Size(min = 4, max = 64,
+            message = "Role description must be between {min} to {max} character long")
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "t_role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JoinTable(name = "t_role_permission", joinColumns = @JoinColumn(name = "role_id") ,
+            inverseJoinColumns = @JoinColumn(name = "permission_id") )
     private List<Permission> permissions = new ArrayList<>();
-
-    private List<String> getPermissionsAsString() {
-        List<String> perms = permissions.stream().map(Permission::getName).collect(Collectors.toList());
-        return perms;
-    }
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", permissions=" + permissions +
-                "} " + super.toString();
+        return "Role{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description
+                + '\'' + ", permissions=" + permissions + "} " + super.toString();
     }
 
     @Override

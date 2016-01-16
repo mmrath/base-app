@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-//This is DTO to hold list of permissions applicable on a Resource. This does not map to a table.
+// This is DTO to hold list of permissions applicable on a Resource. This does not map to a table.
 public class PermissionGroup implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Resource resource;
 
@@ -23,7 +25,8 @@ public class PermissionGroup implements Serializable {
 
     public boolean add(Permission permission) {
         if (permission.getResource() != resource) {
-            throw new IllegalArgumentException("This permission groups is not for the resource" + permission.getResource());
+            throw new IllegalArgumentException(
+                    "This permission groups is not for the resource" + permission.getResource());
         }
         if (!permissions.containsKey(permission.getAccessLevel())) {
             permissions.put(permission.getAccessLevel(), permission);

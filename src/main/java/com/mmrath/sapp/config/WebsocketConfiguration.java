@@ -1,8 +1,10 @@
 package com.mmrath.sapp.config;
 
-import com.mmrath.sapp.security.AuthoritiesConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -18,17 +20,13 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import com.mmrath.sapp.security.AuthoritiesConstants;
 
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfigurer {
 
     public static final String IP_ADDRESS = "IP_ADDRESS";
-    private final Logger log = LoggerFactory.getLogger(WebsocketConfiguration.class);
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -40,18 +38,19 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
         registry.addEndpoint("/websocket/tracker")
                 .setHandshakeHandler(new DefaultHandshakeHandler() {
                     @Override
-                    protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
+                    protected Principal determineUser(ServerHttpRequest request,
+                            WebSocketHandler wsHandler, Map<String, Object> attributes) {
                         Principal principal = request.getPrincipal();
                         if (principal == null) {
                             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                            authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-                            principal = new AnonymousAuthenticationToken("WebsocketConfiguration", "anonymous", authorities);
+                            authorities.add(
+                                    new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+                            principal = new AnonymousAuthenticationToken("WebsocketConfiguration",
+                                    "anonymous", authorities);
                         }
                         return principal;
                     }
-                })
-                .withSockJS()
-                .setInterceptors(httpSessionHandshakeInterceptor());
+                }).withSockJS().setInterceptors(httpSessionHandshakeInterceptor());
     }
 
     @Bean
@@ -59,7 +58,8 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
         return new HandshakeInterceptor() {
 
             @Override
-            public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+            public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
+                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
                 if (request instanceof ServletServerHttpRequest) {
                     ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
                     attributes.put(IP_ADDRESS, servletRequest.getRemoteAddress());
@@ -68,7 +68,8 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
             }
 
             @Override
-            public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+            public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
+                    WebSocketHandler wsHandler, Exception exception) {
 
             }
         };

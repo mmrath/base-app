@@ -1,37 +1,33 @@
 package com.mmrath.sapp.service.data;
 
-import com.mmrath.sapp.domain.data.ColumnDef;
-import com.mmrath.sapp.domain.data.ColumnType;
-import com.mmrath.sapp.domain.data.DataType;
-import com.mmrath.sapp.domain.data.TableDef;
-import com.mmrath.sapp.repository.data.ColumnDefRepository;
-import com.mmrath.sapp.repository.data.TableDefRepository;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.mmrath.sapp.domain.data.ColumnDef;
+import com.mmrath.sapp.domain.data.ColumnType;
+import com.mmrath.sapp.domain.data.DataType;
+import com.mmrath.sapp.domain.data.TableDef;
+import com.mmrath.sapp.repository.data.TableDefRepository;
 
 @Component
 public class TableDefService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TableDefService.class);
 
     @Autowired
-    private DataSource dataSource;
-
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private ColumnDefRepository columnDefRepository;
 
     @Autowired
     private TableDefRepository tableDefRepository;
@@ -44,34 +40,61 @@ public class TableDefService {
         tableDefRepository.delete(tableDef);
     }
 
-    public List<ColumnDef> getColumnDefFromDb(final String tableName) {
+    public Optional<TableDef> getTableDefFromDb(String tableNameIn) {
         String tableNamePattern = "\\w+";
-        if (tableName == null || !tableName.matches(tableNamePattern)) {
-            return new ArrayList<>();
+        if (tableNameIn == null || !tableNameIn.matches(tableNamePattern)) {
+            return Optional.empty();
         }
-        return jdbcTemplate.execute(new ConnectionCallback<List<ColumnDef>>() {
-            @Override
-            public List<ColumnDef> doInConnection(Connection connection) throws SQLException, DataAccessException {
-                List<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
+        final String tableName = tableNameIn.toUpperCase();
+        return jdbcTemplate.execute((ConnectionCallback<Optional<TableDef>>) connection -> {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet tables = metaData.getTables(null, null, tableName, null);
+            if (tables.next()) {
 
-                DatabaseMetaData metaData = connection.getMetaData();
-                ResultSet pkRs = metaData.getPrimaryKeys(null, null, tableName);
-                List<String> pks = new ArrayList<String>();
-                while (pkRs.next()) {
-                    pks.add(pkRs.getString("COLUMN_NAME"));
+                TableDef tableDef = new TableDef();
+                List<ColumnDef> columnDefs = getColumnDefFromDb(tableName);
+                tableDef.setColumns(columnDefs);
+                tableDef.setName(tableName);
+                String friendlyName = tableName.toLowerCase();
+                if (friendlyName.matches("^\\w_\\w+")) {
+                    friendlyName = friendlyName.substring(2);
                 }
+                tableDef.setTagId(friendlyName.replace("_", "-"));
+                tableDef.setDisplayLabel(WordUtils.capitalizeFully(friendlyName.replace("_", " ")));
+                tableDef.setUpdatable(true);
+                tableDef.setInsertable(true);
+                tableDef.setDeletable(true);
+                tableDef.setMultiSelectable(true);
 
-                ResultSet rs = metaData.getColumns(null, null, tableName, null);
-                ColumnDefExtractor extractor = new ColumnDefExtractor(pks);
-                while (rs.next()) {
-                    columnDefs.add(extractor.extract(rs));
-                }
-                return columnDefs;
+                return Optional.of(tableDef);
+            } else {
+                return Optional.empty();
             }
         });
     }
 
-    public static class ColumnDefExtractor {
+    private List<ColumnDef> getColumnDefFromDb(final String tableName) {
+
+        return jdbcTemplate.execute((ConnectionCallback<List<ColumnDef>>) connection -> {
+            List<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
+
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet pkRs = metaData.getPrimaryKeys(null, null, tableName);
+            List<String> pks = new ArrayList<String>();
+            while (pkRs.next()) {
+                pks.add(pkRs.getString("COLUMN_NAME"));
+            }
+
+            ResultSet rs = metaData.getColumns(null, null, tableName, null);
+            ColumnDefExtractor extractor = new ColumnDefExtractor(pks);
+            while (rs.next()) {
+                columnDefs.add(extractor.extract(rs));
+            }
+            return columnDefs;
+        });
+    }
+
+    private static class ColumnDefExtractor {
         private final List<String> pkColumns;
 
         private final ArrayList<String> CREATED_BY_COLUMN_NAMES = new ArrayList<>();
@@ -109,8 +132,8 @@ public class TableDefService {
             columnDef.setLength(dataLength);
             columnDef.setColumnType(getColumnType(columnName, dataType));
             columnDef.setDataType(getDateType(dataType, dataLength, precision));
-            LOGGER.debug("Column {}, SQL Data type is {}, and derived data type {}",
-                    columnName, dataType, columnDef.getDataType());
+            LOGGER.debug("Column {}, SQL Data type is {}, and derived data type {}", columnName,
+                    dataType, columnDef.getDataType());
             setDefaultBasedOnColumnType(columnDef);
 
             return columnDef;
@@ -139,7 +162,8 @@ public class TableDefService {
                 } else if (MODIFIED_BY_COLUMN_NAMES.contains(upperColName)) {
                     return ColumnType.LAST_MODIFIED_BY;
                 }
-            } else if (dataType == Types.TIMESTAMP || dataType == Types.DATE || dataType == Types.TIMESTAMP_WITH_TIMEZONE) {
+            } else if (dataType == Types.TIMESTAMP || dataType == Types.DATE
+                    || dataType == Types.TIMESTAMP_WITH_TIMEZONE) {
                 if (CREATED_DATE_COLUMN_NAMES.contains(upperColName)) {
                     return ColumnType.CREATED_DATE;
                 } else if (MODIFIED_DATE_COLUMN_NAMES.contains(upperColName)) {
@@ -159,7 +183,8 @@ public class TableDefService {
                 return DataType.DATETIME;
             } else if (dataType == Types.DATE) {
                 return DataType.DATE;
-            } else if (dataType == Types.BIGINT || (precision == 0 && dataType == Types.NUMERIC) || dataType == Types.INTEGER || dataType == Types.SMALLINT) {
+            } else if (dataType == Types.BIGINT || (precision == 0 && dataType == Types.NUMERIC)
+                    || dataType == Types.INTEGER || dataType == Types.SMALLINT) {
                 if (length == 1) {
                     return DataType.BOOLEAN;
                 }
@@ -169,7 +194,8 @@ public class TableDefService {
             } else if (dataType == Types.FLOAT || dataType == Types.DOUBLE
                     || dataType == Types.DECIMAL || dataType == Types.NUMERIC) {
                 return DataType.DECIMAL;
-            } else if (dataType == Types.VARCHAR || dataType == Types.NVARCHAR || dataType == Types.CHAR) {
+            } else if (dataType == Types.VARCHAR || dataType == Types.NVARCHAR
+                    || dataType == Types.CHAR) {
                 return DataType.STRING;
             }
             return null;

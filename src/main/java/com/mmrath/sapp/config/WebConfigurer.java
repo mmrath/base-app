@@ -5,7 +5,6 @@ import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
 import com.mmrath.sapp.web.filter.CachingHttpHeadersFilter;
 import com.mmrath.sapp.web.filter.StaticResourcesProductionFilter;
-import cz.jirutka.spring.exhandler.RestHandlerExceptionResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +12,16 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 import javax.servlet.*;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
-
-import static cz.jirutka.spring.exhandler.support.HttpMessageConverterUtils.getDefaultHttpMessageConverters;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -164,38 +152,5 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         h2ConsoleServlet.setLoadOnStartup(1);
     }
 
-    @Bean
-    public WebMvcConfigurerAdapter restExceptionHandlerConfig() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-                resolvers.add(exceptionHandlerExceptionResolver()); // resolves @ExceptionHandler
-                resolvers.add(restExceptionResolver());
-            }
 
-            @Bean
-            public RestHandlerExceptionResolver restExceptionResolver() {
-                return RestHandlerExceptionResolver.builder()
-                        .messageSource(httpErrorMessageSource())
-                        .defaultContentType(MediaType.APPLICATION_JSON)
-                        .addErrorMessageHandler(EmptyResultDataAccessException.class, HttpStatus.NOT_FOUND)
-                        .build();
-            }
-
-            @Bean
-            public MessageSource httpErrorMessageSource() {
-                ReloadableResourceBundleMessageSource m = new ReloadableResourceBundleMessageSource();
-                m.setBasename("classpath:/i18n/messages");
-                m.setDefaultEncoding("UTF-8");
-                return m;
-            }
-
-            @Bean
-            public ExceptionHandlerExceptionResolver exceptionHandlerExceptionResolver() {
-                ExceptionHandlerExceptionResolver resolver = new ExceptionHandlerExceptionResolver();
-                resolver.setMessageConverters(getDefaultHttpMessageConverters());
-                return resolver;
-            }
-        };
-    }
 }

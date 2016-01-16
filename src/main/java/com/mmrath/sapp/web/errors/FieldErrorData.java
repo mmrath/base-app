@@ -2,7 +2,7 @@ package com.mmrath.sapp.web.errors;
 
 import java.io.Serializable;
 
-public class FieldErrorDTO implements Serializable {
+public class FieldErrorData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -12,7 +12,7 @@ public class FieldErrorDTO implements Serializable {
 
     private final String message;
 
-    FieldErrorDTO(String dto, String field, String message) {
+    FieldErrorData(String dto, String field, String message) {
         this.objectName = dto;
         this.field = field;
         this.message = message;

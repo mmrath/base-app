@@ -1,13 +1,14 @@
 package com.mmrath.sapp.web.rest.rsql;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.jpa.domain.Specifications;
+
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.LogicalOperator;
 import cz.jirutka.rsql.parser.ast.Node;
-import org.springframework.data.jpa.domain.Specifications;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RsqlSpecificationBuilder<T> {
 
@@ -46,13 +47,9 @@ public class RsqlSpecificationBuilder<T> {
     }
 
     public Specifications<T> createSpecification(ComparisonNode comparisonNode) {
-        Specifications<T> result = Specifications.where(
-                new RsqlSpecification(
-                        comparisonNode.getSelector(),
-                        comparisonNode.getOperator(),
-                        comparisonNode.getArguments()
-                )
-        );
+        Specifications<T> result =
+                Specifications.where(new RsqlSpecification<T>(comparisonNode.getSelector(),
+                        comparisonNode.getOperator(), comparisonNode.getArguments()));
         return result;
     }
 }

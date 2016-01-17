@@ -5,9 +5,9 @@ import com.mmrath.sapp.domain.core.User;
 import java.time.ZonedDateTime;
 
 /**
- * A DTO extending the UserDTO, which is meant to be used in the user management UI.
+ * A DTO extending the UserData, which is meant to be used in the user management UI.
  */
-public class ManagedUserDTO extends UserDTO {
+public class ManagedUserData extends UserData {
 
     private Long id;
 
@@ -17,10 +17,10 @@ public class ManagedUserDTO extends UserDTO {
 
     private ZonedDateTime lastModifiedDate;
 
-    public ManagedUserDTO() {
+    public ManagedUserData() {
     }
 
-    public ManagedUserDTO(User user) {
+    public ManagedUserData(User user) {
         super(user);
         this.id = user.getId();
         this.createdDate = user.getCreatedDate();
@@ -62,7 +62,7 @@ public class ManagedUserDTO extends UserDTO {
 
     @Override
     public String toString() {
-        return "ManagedUserDTO{" +
+        return "ManagedUserData{" +
                 "id=" + id +
                 ", createdDate=" + createdDate +
                 ", lastModifiedBy='" + lastModifiedBy + '\'' +

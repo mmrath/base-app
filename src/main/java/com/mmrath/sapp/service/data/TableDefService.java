@@ -1,13 +1,10 @@
 package com.mmrath.sapp.service.data;
 
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.mmrath.sapp.domain.data.ColumnDef;
+import com.mmrath.sapp.domain.data.ColumnType;
+import com.mmrath.sapp.domain.data.DataType;
+import com.mmrath.sapp.domain.data.TableDef;
+import com.mmrath.sapp.repository.data.TableDefRepository;
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +13,13 @@ import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.mmrath.sapp.domain.data.ColumnDef;
-import com.mmrath.sapp.domain.data.ColumnType;
-import com.mmrath.sapp.domain.data.DataType;
-import com.mmrath.sapp.domain.data.TableDef;
-import com.mmrath.sapp.repository.data.TableDefRepository;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TableDefService {
@@ -77,18 +76,19 @@ public class TableDefService {
 
         return jdbcTemplate.execute((ConnectionCallback<List<ColumnDef>>) connection -> {
             List<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
-
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet pkRs = metaData.getPrimaryKeys(null, null, tableName);
             List<String> pks = new ArrayList<String>();
             while (pkRs.next()) {
                 pks.add(pkRs.getString("COLUMN_NAME"));
             }
-
             ResultSet rs = metaData.getColumns(null, null, tableName, null);
             ColumnDefExtractor extractor = new ColumnDefExtractor(pks);
+            int index = 0;
             while (rs.next()) {
-                columnDefs.add(extractor.extract(rs));
+                ColumnDef columnDef = extractor.extract(rs);
+                columnDef.setIndex(index++);
+                columnDefs.add(columnDef);
             }
             return columnDefs;
         });
@@ -140,15 +140,20 @@ public class TableDefService {
         }
 
         private void setDefaultBasedOnColumnType(ColumnDef columnDef) {
-            if (columnDef.getColumnType() != null) {
+            if (columnDef.getColumnType() != null
+                    && columnDef.getColumnType() != ColumnType.REGULAR) {
                 columnDef.setShowInList(false);
                 columnDef.setInsertable(false);
                 columnDef.setUpdatable(false);
                 columnDef.setNullable(false);
+                columnDef.setSearchable(false);
+                columnDef.setSortable(false);
             } else {
                 columnDef.setShowInList(true);
                 columnDef.setInsertable(true);
                 columnDef.setUpdatable(true);
+                columnDef.setSearchable(true);
+                columnDef.setSortable(true);
             }
         }
 

@@ -1,7 +1,7 @@
 package com.mmrath.sapp.web.websocket;
 
 import com.mmrath.sapp.security.SecurityUtils;
-import com.mmrath.sapp.web.dto.ActivityDTO;
+import com.mmrath.sapp.web.dto.ActivityData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,22 +33,22 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
 
     @SubscribeMapping("/topic/activity")
     @SendTo("/topic/tracker")
-    public ActivityDTO sendActivity(@Payload ActivityDTO activityDTO, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
-        activityDTO.setUserLogin(SecurityUtils.getCurrentUserLogin());
-        activityDTO.setUserLogin(principal.getName());
-        activityDTO.setSessionId(stompHeaderAccessor.getSessionId());
-        activityDTO.setIpAddress(stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString());
+    public ActivityData sendActivity(@Payload ActivityData activityData, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
+        activityData.setUserLogin(SecurityUtils.getCurrentUserLogin());
+        activityData.setUserLogin(principal.getName());
+        activityData.setSessionId(stompHeaderAccessor.getSessionId());
+        activityData.setIpAddress(stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString());
         Instant instant = Instant.ofEpochMilli(Calendar.getInstance().getTimeInMillis());
-        activityDTO.setTime(dateTimeFormatter.format(ZonedDateTime.ofInstant(instant, ZoneOffset.systemDefault())));
-        log.debug("Sending user tracking data {}", activityDTO);
-        return activityDTO;
+        activityData.setTime(dateTimeFormatter.format(ZonedDateTime.ofInstant(instant, ZoneOffset.systemDefault())));
+        log.debug("Sending user tracking data {}", activityData);
+        return activityData;
     }
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
-        ActivityDTO activityDTO = new ActivityDTO();
-        activityDTO.setSessionId(event.getSessionId());
-        activityDTO.setPage("logout");
-        messagingTemplate.convertAndSend("/topic/tracker", activityDTO);
+        ActivityData activityData = new ActivityData();
+        activityData.setSessionId(event.getSessionId());
+        activityData.setPage("logout");
+        messagingTemplate.convertAndSend("/topic/tracker", activityData);
     }
 }

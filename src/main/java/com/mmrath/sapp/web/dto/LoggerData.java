@@ -3,19 +3,19 @@ package com.mmrath.sapp.web.dto;
 import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class LoggerDTO {
+public class LoggerData {
 
     private String name;
 
     private String level;
 
-    public LoggerDTO(Logger logger) {
+    public LoggerData(Logger logger) {
         this.name = logger.getName();
         this.level = logger.getEffectiveLevel().toString();
     }
 
     @JsonCreator
-    public LoggerDTO() {
+    public LoggerData() {
     }
 
     public String getName() {
@@ -36,7 +36,7 @@ public class LoggerDTO {
 
     @Override
     public String toString() {
-        return "LoggerDTO{" +
+        return "LoggerData{" +
                 "name='" + name + '\'' +
                 ", level='" + level + '\'' +
                 '}';

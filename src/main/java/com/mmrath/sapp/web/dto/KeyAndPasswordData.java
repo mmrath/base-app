@@ -1,11 +1,11 @@
 package com.mmrath.sapp.web.dto;
 
-public class KeyAndPasswordDTO {
+public class KeyAndPasswordData {
 
     private String key;
     private String newPassword;
 
-    public KeyAndPasswordDTO() {
+    public KeyAndPasswordData() {
     }
 
     public String getKey() {

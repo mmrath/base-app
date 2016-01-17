@@ -3,7 +3,7 @@ package com.mmrath.sapp.web.dto;
 /**
  * DTO for storing a user's activity.
  */
-public class ActivityDTO {
+public class ActivityData {
 
     private String sessionId;
 
@@ -57,7 +57,7 @@ public class ActivityDTO {
 
     @Override
     public String toString() {
-        return "ActivityDTO{" +
+        return "ActivityData{" +
                 "sessionId='" + sessionId + '\'' +
                 ", userLogin='" + userLogin + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +

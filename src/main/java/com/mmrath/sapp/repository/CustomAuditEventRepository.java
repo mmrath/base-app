@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class CustomAuditEventRepository {
                     persistentAuditEvent.setPrincipal(event.getPrincipal());
                     persistentAuditEvent.setAuditEventType(event.getType());
                     Instant instant = Instant.ofEpochMilli(event.getTimestamp().getTime());
-                    persistentAuditEvent.setAuditEventDate(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));
+                    persistentAuditEvent.setAuditEventDate(ZonedDateTime.ofInstant(event.getTimestamp().toInstant(), ZoneId.systemDefault()));
                     persistentAuditEvent.setData(auditEventConverter.convertDataToStrings(event.getData()));
                     persistenceAuditEventRepository.save(persistentAuditEvent);
                 }

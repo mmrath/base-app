@@ -6,7 +6,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import javax.validation.constraints.NotNull;
 
 /**
- * Properties specific to JHipster.
+ * Properties specific to Application.
  * <p>
  * <p>
  * Properties are configured in the application.yml file.
@@ -258,9 +258,9 @@ public class ApplicationProperties {
 
     public static class Swagger {
 
-        private String title = "jhipster API";
+        private String title = "Application API";
 
-        private String description = "jhipster API documentation";
+        private String description = "Application API documentation";
 
         private String version = "0.0.1";
 

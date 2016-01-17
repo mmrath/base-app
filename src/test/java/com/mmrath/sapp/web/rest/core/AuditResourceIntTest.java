@@ -5,7 +5,6 @@ import com.mmrath.sapp.config.audit.AuditEventConverter;
 import com.mmrath.sapp.domain.PersistentAuditEvent;
 import com.mmrath.sapp.repository.PersistenceAuditEventRepository;
 import com.mmrath.sapp.service.AuditEventService;
-import com.mmrath.sapp.web.rest.core.AuditResource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,7 +37,7 @@ public class AuditResourceIntTest {
 
     private static final String SAMPLE_PRINCIPAL = "SAMPLE_PRINCIPAL";
     private static final String SAMPLE_TYPE = "SAMPLE_TYPE";
-    private static final LocalDateTime SAMPLE_TIMESTAMP = LocalDateTime.parse("2015-08-04T10:11:30");
+    private static final ZonedDateTime SAMPLE_TIMESTAMP = ZonedDateTime.parse("2015-08-04T10:11:30Z");
 
     @Autowired
     private PersistenceAuditEventRepository auditEventRepository;

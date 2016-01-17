@@ -6,7 +6,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.*;
 
 @Component
@@ -36,7 +35,7 @@ public class AuditEventConverter {
      * @return the converted list.
      */
     public AuditEvent convertToAuditEvent(PersistentAuditEvent persistentAuditEvent) {
-        Instant instant = persistentAuditEvent.getAuditEventDate().atZone(ZoneId.systemDefault()).toInstant();
+        Instant instant = persistentAuditEvent.getAuditEventDate().toInstant();
         return new AuditEvent(Date.from(instant), persistentAuditEvent.getPrincipal(),
                 persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
     }

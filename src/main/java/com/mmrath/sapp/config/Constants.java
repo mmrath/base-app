@@ -5,7 +5,7 @@ package com.mmrath.sapp.config;
  */
 public final class Constants {
 
-    // Spring profile for development, production and "fast", see http://jhipster.github.io/profiles.html
+    // Spring profile for development, production and "fast"
     public static final String SPRING_PROFILE_DEVELOPMENT = "local";
     public static final String SPRING_PROFILE_PRODUCTION = "prod";
     public static final String SPRING_PROFILE_FAST = "fast";

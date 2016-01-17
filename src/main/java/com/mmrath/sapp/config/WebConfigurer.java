@@ -27,7 +27,8 @@ import java.util.EnumSet;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
+public class WebConfigurer
+        implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -42,8 +43,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
+        log.info("Web application configuration, using profiles: {}",
+                Arrays.toString(env.getActiveProfiles()));
+        EnumSet<DispatcherType> disps =
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         if (!env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
             initMetrics(servletContext, disps);
         }
@@ -77,9 +80,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
                                                      EnumSet<DispatcherType> disps) {
 
         log.debug("Registering static resources production Filter");
-        FilterRegistration.Dynamic staticResourcesProductionFilter =
-                servletContext.addFilter("staticResourcesProductionFilter",
-                        new StaticResourcesProductionFilter());
+        FilterRegistration.Dynamic staticResourcesProductionFilter = servletContext.addFilter(
+                "staticResourcesProductionFilter", new StaticResourcesProductionFilter());
 
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
@@ -94,9 +96,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void initCachingHttpHeadersFilter(ServletContext servletContext,
                                               EnumSet<DispatcherType> disps) {
         log.debug("Registering Caching HTTP Headers Filter");
-        FilterRegistration.Dynamic cachingHttpHeadersFilter =
-                servletContext.addFilter("cachingHttpHeadersFilter",
-                        new CachingHttpHeadersFilter(env));
+        FilterRegistration.Dynamic cachingHttpHeadersFilter = servletContext
+                .addFilter("cachingHttpHeadersFilter", new CachingHttpHeadersFilter(env));
 
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/assets/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/scripts/*");
@@ -108,14 +109,12 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
      */
     private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Initializing Metrics registries");
-        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-                metricRegistry);
-        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-                metricRegistry);
+        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE, metricRegistry);
+        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY, metricRegistry);
 
         log.debug("Registering Metrics Filter");
-        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-                new InstrumentedFilter());
+        FilterRegistration.Dynamic metricsFilter =
+                servletContext.addFilter("webappMetricsFilter", new InstrumentedFilter());
 
         metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
         metricsFilter.setAsyncSupported(true);
@@ -146,7 +145,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
      */
     private void initH2Console(ServletContext servletContext) {
         log.debug("Initialize H2 console");
-        ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
+        ServletRegistration.Dynamic h2ConsoleServlet =
+                servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
         h2ConsoleServlet.addMapping("/console/*");
         h2ConsoleServlet.setInitParameter("-properties", "src/main/resources");
         h2ConsoleServlet.setLoadOnStartup(1);

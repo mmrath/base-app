@@ -57,8 +57,8 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: 34286c8688fe8568a6fcded30fe5a7b87ccd8bbd
     swagger:
-        title: jhipster API
-        description: jhipster API documentation
+        title: Application API
+        description: Application API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contact:

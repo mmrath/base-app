@@ -13,7 +13,7 @@
             <column name="name" type="VARCHAR(64)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="tag_id" type="VARCHAR(32)">
+            <column name="alias" type="VARCHAR(32)">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="display_label" type="VARCHAR(64)">

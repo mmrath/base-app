@@ -22,7 +22,7 @@ public class TableDefServiceTest extends AbstractIntegrationTest {
         logger.info("Columns:{}", tableDef);
         assertThat(tableDef.getName()).matches("T_ROLE");
         assertThat(tableDef.getColumns().size()).isGreaterThan(0);
-        assertThat(tableDef.getTagId()).matches("role");
+        assertThat(tableDef.getAlias()).matches("role");
         assertThat(tableDef.getDisplayLabel()).matches("Role");
     }
 }

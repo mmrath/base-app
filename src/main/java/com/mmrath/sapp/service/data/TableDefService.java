@@ -39,6 +39,10 @@ public class TableDefService {
         tableDefRepository.delete(tableDef);
     }
 
+    public TableDef findById(long id) {
+        return tableDefRepository.findOne(id);
+    }
+
     public Optional<TableDef> getTableDefFromDb(String tableNameIn) {
         String tableNamePattern = "\\w+";
         if (tableNameIn == null || !tableNameIn.matches(tableNamePattern)) {
@@ -58,7 +62,7 @@ public class TableDefService {
                 if (friendlyName.matches("^\\w_\\w+")) {
                     friendlyName = friendlyName.substring(2);
                 }
-                tableDef.setTagId(friendlyName.replace("_", "-"));
+                tableDef.setAlias(friendlyName.replace("_", "-"));
                 tableDef.setDisplayLabel(WordUtils.capitalizeFully(friendlyName.replace("_", " ")));
                 tableDef.setUpdatable(true);
                 tableDef.setInsertable(true);
@@ -131,7 +135,7 @@ public class TableDefService {
             columnDef.setNullable(nullable);
             columnDef.setLength(dataLength);
             columnDef.setColumnType(getColumnType(columnName, dataType));
-            columnDef.setDataType(getDateType(dataType, dataLength, precision));
+            columnDef.setDataType(getDataType(dataType, dataLength, precision));
             LOGGER.debug("Column {}, SQL Data type is {}, and derived data type {}", columnName,
                     dataType, columnDef.getDataType());
             setDefaultBasedOnColumnType(columnDef);
@@ -183,7 +187,7 @@ public class TableDefService {
             return ColumnType.REGULAR;
         }
 
-        DataType getDateType(int dataType, int length, int precision) {
+        DataType getDataType(int dataType, int length, int precision) {
             if (dataType == Types.TIMESTAMP || dataType == Types.TIMESTAMP_WITH_TIMEZONE) {
                 return DataType.DATETIME;
             } else if (dataType == Types.DATE) {

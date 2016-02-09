@@ -1,5 +1,6 @@
 package com.mmrath.sapp.domain.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mmrath.sapp.domain.AbstractAuditingEntity;
 
 import javax.persistence.*;
@@ -20,12 +21,12 @@ public class TableDef extends AbstractAuditingEntity<Long> {
 
 
     @Pattern(regexp = "[a-z0-9-]{3,25}",
-            message = "Table tag can only contain lower case letters, number and hyphen")
+            message = "Table alias can only contain lower case letters, number and hyphen")
     @NotNull
     @Size(min = 3, max = 25,
-            message = "Table tag must be of length between {min} and {max} characters")
-    @Column(name = "tag_id", nullable = false, length = 32, unique = true)
-    private String tagId;
+            message = "Table alias must be of length between {min} and {max} characters")
+    @Column(name = "alias", nullable = false, length = 32, unique = true)
+    private String alias;
 
     @Pattern(regexp = "[A-Za-z0-9_]*")
     @NotNull
@@ -56,6 +57,7 @@ public class TableDef extends AbstractAuditingEntity<Long> {
     @Transient
     private ColumnDef primaryKeyColumn;
 
+    @JsonProperty
     public ColumnDef getPrimaryKeyColumn() {
         if (this.columns != null) {
             for (ColumnDef columnDef : columns) {
@@ -69,7 +71,7 @@ public class TableDef extends AbstractAuditingEntity<Long> {
 
     @Override
     public String toString() {
-        return "TableDef{" + "id=" + id + ", tagId='" + tagId + '\'' + ", name='" + name + '\''
+        return "TableDef{" + "id=" + id + ", alias='" + alias + '\'' + ", name='" + name + '\''
                 + ", displayLabel='" + displayLabel + '\'' + ", insertable=" + insertable
                 + ", updatable=" + updatable + ", deletable=" + deletable + ", multiSelectable="
                 + multiSelectable + ", columns=" + columns + ", primaryKeyColumn="
@@ -85,12 +87,12 @@ public class TableDef extends AbstractAuditingEntity<Long> {
         this.id = id;
     }
 
-    public String getTagId() {
-        return tagId;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setTagId(String tagId) {
-        this.tagId = tagId;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getName() {

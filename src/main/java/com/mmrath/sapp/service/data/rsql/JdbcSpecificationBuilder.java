@@ -1,17 +1,18 @@
-package com.mmrath.sapp.web.rest.rsql;
+package com.mmrath.sapp.service.data.rsql;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.LogicalOperator;
 import cz.jirutka.rsql.parser.ast.Node;
-import org.springframework.data.jpa.domain.Specifications;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RsqlSpecificationBuilder<T> {
+import static com.mmrath.sapp.service.data.rsql.JdbcSpecification.where;
 
-    public Specifications<T> createSpecification(Node node) {
+public class JdbcSpecificationBuilder {
+
+    public JdbcSpecification createSpecification(Node node) {
         if (node instanceof LogicalNode) {
             return createSpecification((LogicalNode) node);
         }
@@ -21,9 +22,9 @@ public class RsqlSpecificationBuilder<T> {
         return null;
     }
 
-    public Specifications<T> createSpecification(LogicalNode logicalNode) {
-        List<Specifications<T>> specs = new ArrayList<Specifications<T>>();
-        Specifications<T> temp;
+    public JdbcSpecification createSpecification(LogicalNode logicalNode) {
+        List<JdbcSpecification> specs = new ArrayList<JdbcSpecification>();
+        JdbcSpecification temp;
         for (Node node : logicalNode.getChildren()) {
             temp = createSpecification(node);
             if (temp != null) {
@@ -31,23 +32,22 @@ public class RsqlSpecificationBuilder<T> {
             }
         }
 
-        Specifications<T> result = specs.get(0);
+        JdbcSpecification result = specs.get(0);
         if (logicalNode.getOperator() == LogicalOperator.AND) {
             for (int i = 1; i < specs.size(); i++) {
-                result = Specifications.where(result).and(specs.get(i));
+                result = result.and(specs.get(i));
             }
         } else if (logicalNode.getOperator() == LogicalOperator.OR) {
             for (int i = 1; i < specs.size(); i++) {
-                result = Specifications.where(result).or(specs.get(i));
+                result = result.or(specs.get(i));
             }
         }
         return result;
     }
 
-    public Specifications<T> createSpecification(ComparisonNode comparisonNode) {
-        Specifications<T> result =
-                Specifications.where(new RsqlSpecification<T>(comparisonNode.getSelector(),
-                        comparisonNode.getOperator(), comparisonNode.getArguments()));
+    public JdbcSpecification createSpecification(ComparisonNode comparisonNode) {
+        JdbcSpecification result = where(comparisonNode.getSelector(),
+                comparisonNode.getOperator(), comparisonNode.getArguments());
         return result;
     }
 }

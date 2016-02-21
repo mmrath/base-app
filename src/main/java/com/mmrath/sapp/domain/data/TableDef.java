@@ -69,6 +69,18 @@ public class TableDef extends AbstractAuditingEntity<Long> {
         return null;
     }
 
+    @JsonProperty
+    public ColumnDef getVersionColumn() {
+        if (this.columns != null) {
+            for (ColumnDef columnDef : columns) {
+                if (columnDef.getColumnType() == ColumnType.VERSION) {
+                    return columnDef;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "TableDef{" + "id=" + id + ", alias='" + alias + '\'' + ", name='" + name + '\''

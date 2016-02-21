@@ -417,8 +417,8 @@
     </changeSet>
     
     <changeSet id="1.0.19" author="murali">
-        <sqlFile path="data/security/resource_v1.0.sql" relativeToChangelogFile="true"></sqlFile>
-        <sqlFile path="data/security/permission_v1.0.sql" relativeToChangelogFile="true" ></sqlFile>
+        <sqlFile path="data/core/resource_v1.0.sql" relativeToChangelogFile="true"></sqlFile>
+        <sqlFile path="data/core/permission_v1.0.sql" relativeToChangelogFile="true"></sqlFile>
     </changeSet>
 
 

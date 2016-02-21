@@ -48,14 +48,16 @@ public class SqlGenerator {
 
     private String whereByIdClause(TableDef table) {
         final StringBuilder whereClause = new StringBuilder(WHERE);
-        whereClause.append(table.getPrimaryKeyColumn().getName()).append(PARAM);
+        whereClause.append(table.getPrimaryKeyColumn().getColumnName()).append(PARAM);
+
+
         return whereClause.toString();
     }
 
     private String whereByIdsClause(TableDef table, int idsCount) {
         final StringBuilder whereClause = new StringBuilder(WHERE);
         return whereClause.
-                append(table.getPrimaryKeyColumn().getName()).
+                append(table.getPrimaryKeyColumn().getColumnName()).
                 append(" IN (").
                 append(repeat("?", COMMA, idsCount)).
                 append(")").
@@ -128,10 +130,15 @@ public class SqlGenerator {
                     updateQuery.append(COMMA);
                 }
                 columnAdded = true;
-                updateQuery.append(column.getName()).append(" = ?");
+                updateQuery.append(column.getColumnName()).append(" = ?");
             }
         }
         updateQuery.append(whereByIdClause(table));
+        ColumnDef versionCol = table.getVersionColumn();
+        if (versionCol != null) {
+            updateQuery.append(AND);
+            updateQuery.append(versionCol.getColumnName()).append(PARAM);
+        }
         return updateQuery.toString();
     }
 
@@ -148,7 +155,7 @@ public class SqlGenerator {
                 }
                 columnAdded = true;
                 totalColumnsAdded = totalColumnsAdded + 1;
-                createQuery.append(column.getName());
+                createQuery.append(column.getColumnName());
             }
         }
         createQuery.append(")").append(" VALUES (");
@@ -170,7 +177,7 @@ public class SqlGenerator {
         StringBuilder columnsQry = new StringBuilder();
         for (Iterator<ColumnDef> iterator = table.getColumns().iterator(); iterator.hasNext(); ) {
             ColumnDef column = iterator.next();
-            columnsQry.append(column.getName());
+            columnsQry.append(column.getColumnName());
             if (iterator.hasNext()) {
                 columnsQry.append(COMMA);
             }

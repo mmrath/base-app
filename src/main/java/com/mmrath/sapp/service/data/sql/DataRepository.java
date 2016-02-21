@@ -9,15 +9,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlTypeValue;
+import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
-import java.util.Date;
 
+/**
+ * Current implementation works only for single column auto generated primary key
+ */
 public class DataRepository {
     private static final Logger logger = LoggerFactory.getLogger(DataRepository.class);
 
@@ -75,7 +83,43 @@ public class DataRepository {
         String updateSql = sqlGenerator.update(table);
         logger.trace("Update SQL: {}", updateSql);
 
-        return values;
+        ArrayList<Object> params = new ArrayList<>();
+        Map<String, Object> updatedValues = new HashMap<>();
+
+        table.getColumns().stream()
+                .filter(column -> DataUtils.isAllowedInUpdateClause(column))
+                .forEach(column -> {
+                    Object value = DataUtils.getValueForUpdate(column, values);
+                    updatedValues.put(column.getName(), value);
+                    params.add(value);
+                });
+        params.add(values.get(table.getPrimaryKeyColumn().getName()));
+        updatedValues.put(table.getPrimaryKeyColumn().getName(), values.get(table.getPrimaryKeyColumn().getName()));
+        ColumnDef versionCol = table.getVersionColumn();
+        if (versionCol != null) {
+            params.add(values.get(table.getVersionColumn().getName()));
+        }
+        final Object[] paramsArray = params.toArray();
+        if (logger.isDebugEnabled()) {
+            logger.debug("Values {}", Arrays.toString(paramsArray));
+        }
+        final KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        int updatedRows = jdbcOperations.update(con -> {
+            PreparedStatement ps = con.prepareStatement(updateSql);
+            int colIndex = 0;
+            for (Object value : paramsArray) {
+                colIndex++;
+                StatementCreatorUtils.setParameterValue(ps, colIndex, SqlTypeValue.TYPE_UNKNOWN, value);
+            }
+            return ps;
+        });
+
+        if (updatedRows != 1) {
+            throw new RuntimeException("Optimistic lock exception");
+        }
+
+        return updatedValues;
     }
 
 
@@ -83,11 +127,13 @@ public class DataRepository {
         String createSql = sqlGenerator.create(table);
         logger.trace("Create SQL: {}", createSql);
         ArrayList<Object> params = new ArrayList<>();
+        Map<String, Object> insertedValues = new HashMap<>();
 
         table.getColumns().stream()
                 .filter(column -> DataUtils.isAllowedInInsertClause(column))
                 .forEach(column -> {
                     Object value = DataUtils.getValueForInsert(column, values);
+                    insertedValues.put(column.getName(), value);
                     params.add(value);
                 });
         final Object[] paramsArray = params.toArray();
@@ -96,21 +142,18 @@ public class DataRepository {
         }
         final KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcOperations.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement ps = con.prepareStatement(createSql, Statement.RETURN_GENERATED_KEYS);
-                int colIndex = 0;
-                for (Object value : paramsArray) {
-                    colIndex++;
-                    StatementCreatorUtils.setParameterValue(ps, colIndex, SqlTypeValue.TYPE_UNKNOWN, value);
-                }
-                return ps;
+        jdbcOperations.update(con -> {
+            PreparedStatement ps = con.prepareStatement(createSql, Statement.RETURN_GENERATED_KEYS);
+            int colIndex = 0;
+            for (Object value : paramsArray) {
+                colIndex++;
+                StatementCreatorUtils.setParameterValue(ps, colIndex, SqlTypeValue.TYPE_UNKNOWN, value);
             }
+            return ps;
         }, keyHolder);
         logger.debug("Generated key: {}", keyHolder.getKey().longValue());
-        values.put(table.getPrimaryKeyColumn().getName(), keyHolder.getKey().longValue());
-        return values;
+        insertedValues.put(table.getPrimaryKeyColumn().getName(), keyHolder.getKey().longValue());
+        return insertedValues;
     }
 
 
@@ -126,7 +169,7 @@ public class DataRepository {
             Map<String, Object> map = new HashMap<>();
 
             for (ColumnDef column : table.getColumns()) {
-                String columnName = column.getName();
+                String columnName = column.getColumnName();
                 DataType dataType = column.getDataType();
                 Object value;
                 if (dataType == DataType.BOOLEAN) {

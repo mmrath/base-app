@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,12 @@ public class DataServiceTest extends AbstractIntegrationTest {
         TableDef table = prepareTableDef("test_table1");
         Map<String, Object> values = new HashMap<>();
         values.put("TEST_COLUMN", "Test");
-        values = dataService.create(table.getId(), values);
+        values.put("notNullableVarcharCol", "Test");
+        values.put("notnullDateCol", new Date());
+        values.put("notnullDatetimeCol", new Date());
+        values.put("notnullNumberCol", 10);
+        values.put("notnullBooleanCol", false);
+        values = dataService.create(table.getAlias(), values);
         assertThat(values.get(table.getPrimaryKeyColumn().getName())).isNotNull();
     }
 
@@ -36,11 +42,26 @@ public class DataServiceTest extends AbstractIntegrationTest {
         TableDef table = prepareTableDef("test_table1");
         Map<String, Object> values = new HashMap<>();
         values.put("TEST_COLUMN", "Test");
-        values = dataService.create(table.getId(), values);
+        values.put("notNullableVarcharCol", "Test");
+        values.put("notnullDateCol", new Date());
+        values.put("notnullDatetimeCol", new Date());
+        values.put("notnullNumberCol", 10);
+        values.put("notnullBooleanCol", false);
+
+        values = dataService.create(table.getAlias(), values);
+
+        values.put("notnullNumberCol", 20);
+        values = dataService.update(table.getAlias(), values);
+
         assertThat(values.get(table.getPrimaryKeyColumn().getName())).isNotNull();
+        assertThat(values.get(table.getVersionColumn().getName())).isEqualTo(2L);
 
-        Page<Map<String, Object>> page = dataService.findAll(table.getId(), new PageRequest(0, 20));
+        Page<Map<String, Object>> page = dataService.findAll(table.getAlias(), new PageRequest(0, 20));
+        assertThat(page.getTotalElements()).isEqualTo(1L);
 
+        dataService.delete(table.getAlias(), (Long) values.get(table.getPrimaryKeyColumn().getName()));
+        page = dataService.findAll(table.getAlias(), new PageRequest(0, 20));
+        assertThat(page.getTotalElements()).isEqualTo(0L);
     }
 
 

@@ -1,22 +1,12 @@
 package com.mmrath.sapp.domain.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mmrath.sapp.domain.AbstractAuditingEntity;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.mmrath.sapp.domain.AbstractAuditingEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Murali
@@ -42,14 +32,14 @@ public class UserGroup extends AbstractAuditingEntity<Long> {
     private String description;
 
     @ManyToMany
-    @JoinTable(name = "t_user_group_role", joinColumns = @JoinColumn(name = "group_id") ,
-            inverseJoinColumns = @JoinColumn(name = "role_id") )
+    @JoinTable(name = "t_user_group_role", joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "t_user_group_user", joinColumns = @JoinColumn(name = "group_id") ,
-            inverseJoinColumns = @JoinColumn(name = "user_id") )
-    private List<Role> users = new ArrayList<>();
+    @JoinTable(name = "t_user_group_user", joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users = new ArrayList<>();
 
     @Override
     public Long getId() {
@@ -84,11 +74,11 @@ public class UserGroup extends AbstractAuditingEntity<Long> {
         this.roles = roles;
     }
 
-    public List<Role> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<Role> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 }

@@ -30,8 +30,7 @@ public class DataService {
         dataRepository = new DataRepository(jdbcTemplate);
     }
 
-
-    public long count(long tableDefId) {
+    public long count(String tableDefId) {
         return dataRepository.count(getTableDef(tableDefId));
     }
 
@@ -39,49 +38,36 @@ public class DataService {
         dataRepository.delete(getTableDef(alias), id);
     }
 
-    public void deleteAll(long tableId, Iterable<? extends Serializable> ids) {
-        dataRepository.delete(getTableDef(tableId), ids);
+    public void deleteAll(String tableAlias, Iterable<? extends Serializable> ids) {
+        dataRepository.delete(getTableDef(tableAlias), ids);
     }
 
-    public boolean exists(long tableId, Serializable id) {
-        return dataRepository.exists(getTableDef(tableId), id);
+    public boolean exists(String tableAlias, Serializable id) {
+        return dataRepository.exists(getTableDef(tableAlias), id);
     }
 
-    public List<Map<String, Object>> findAll(long tableId) {
-        return dataRepository.findAll(getTableDef(tableId));
-    }
-
-    public Map<String, Object> findOne(long tableId, Serializable id) {
-        return dataRepository.findOne(getTableDef(tableId), id);
+    public List<Map<String, Object>> findAll(String tableAlias) {
+        return dataRepository.findAll(getTableDef(tableAlias));
     }
 
     public Map<String, Object> findOne(String alias, Serializable id) {
         return dataRepository.findOne(getTableDef(alias), id);
     }
 
-    public Map<String, Object> create(long tableId, Map<String, Object> values) {
-        return dataRepository.create(getTableDef(tableId), values);
-    }
-
     public Map<String, Object> create(String alias, Map<String, Object> values) {
-        return dataRepository.create(getTableDef(alias), values);
+        TableDef table = getTableDef(alias);
+        DataValidator.validate(table, values, true);
+        return dataRepository.create(table, values);
     }
 
     public Map<String, Object> update(String alias, Map<String, Object> values) {
+        TableDef table = getTableDef(alias);
+        DataValidator.validate(table, values, false);
         return dataRepository.update(getTableDef(alias), values);
-    }
-
-
-    public Page<Map<String, Object>> findAll(long tableId, Pageable page) {
-        return dataRepository.findAll(getTableDef(tableId), null, page);
     }
 
     public Page<Map<String, Object>> findAll(String alias, Pageable page) {
         return dataRepository.findAll(getTableDef(alias), null, page);
-    }
-
-    private TableDef getTableDef(long tableId) {
-        return tableDefRepository.findOne(tableId);
     }
 
     private TableDef getTableDef(String alias) {

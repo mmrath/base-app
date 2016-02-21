@@ -122,6 +122,7 @@ public class TableDefService {
         public ColumnDef extract(ResultSet rs) throws SQLException {
             String columnName = rs.getString("COLUMN_NAME");
             String columnLabel = WordUtils.capitalizeFully(columnName.replace("_", " "));
+            String alias = WordUtils.uncapitalize(columnLabel.replace(" ", ""));
             boolean nullable = rs.getInt("NULLABLE") != 0;
             int dataType = rs.getInt("DATA_TYPE");
             int dataLength = rs.getInt("COLUMN_SIZE");
@@ -130,7 +131,8 @@ public class TableDefService {
             ColumnDef columnDef = new ColumnDef();
 
 
-            columnDef.setName(columnName);
+            columnDef.setColumnName(columnName);
+            columnDef.setName(alias);
             columnDef.setDisplayLabel(columnLabel);
             columnDef.setNullable(nullable);
             columnDef.setLength(dataLength);

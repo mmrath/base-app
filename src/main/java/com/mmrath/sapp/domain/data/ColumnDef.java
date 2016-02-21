@@ -20,6 +20,11 @@ public class ColumnDef implements Serializable {
     private Integer index;
 
     @Pattern(regexp = "[a-zA-Z0-9_]+")
+    @Column(name = "column_name", nullable = false, length = 64)
+    private String columnName;
+
+    //A friendly name to hide column name. Can be used in search queries
+    @Pattern(regexp = "[a-z][a-zA-Z0-9]+")
     @Column(name = "name", nullable = false, length = 64)
     private String name;
 
@@ -74,14 +79,27 @@ public class ColumnDef implements Serializable {
 
     @Override
     public String toString() {
-        return "ColumnDef{" + "id=" + id + ", index=" + index + ", name='" + name + '\''
-                + ", displayLabel='" + displayLabel + '\'' + ", nullable=" + nullable
-                + ", insertable=" + insertable + ", updatable=" + updatable + ", searchable="
-                + searchable + ", sortable=" + sortable + ", showInList=" + showInList
-                + ", dataType=" + dataType + ", columnType=" + columnType + ", length=" + length
-                + ", dataTemplate='" + dataTemplate + '\'' + ", headerTemplate='" + headerTemplate
-                + '\'' + ", validPattern='" + validPattern + '\'' + ", validPatternMessage='"
-                + validPatternMessage + '\'' + ", defaultValue='" + defaultValue + '\'' + '}';
+        return "ColumnDef{" +
+                "id=" + id +
+                ", index=" + index +
+                ", name='" + columnName + '\'' +
+                ", code='" + name + '\'' +
+                ", displayLabel='" + displayLabel + '\'' +
+                ", nullable=" + nullable +
+                ", insertable=" + insertable +
+                ", updatable=" + updatable +
+                ", searchable=" + searchable +
+                ", sortable=" + sortable +
+                ", showInList=" + showInList +
+                ", dataType=" + dataType +
+                ", columnType=" + columnType +
+                ", length=" + length +
+                ", dataTemplate='" + dataTemplate + '\'' +
+                ", headerTemplate='" + headerTemplate + '\'' +
+                ", validPattern='" + validPattern + '\'' +
+                ", validPatternMessage='" + validPatternMessage + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
+                '}';
     }
 
     public Long getId() {
@@ -98,6 +116,14 @@ public class ColumnDef implements Serializable {
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
     }
 
     public String getName() {

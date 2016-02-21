@@ -14,7 +14,7 @@ public class SqlHelper {
     public static String generateSelectAllWithPagination(TableDef table, Pageable page, SqlGenerator sqlGenerator) {
         final int beginOffset = page.getPageNumber() * page.getPageSize() + 1;
         final int endOffset = beginOffset + page.getPageSize() - 1;
-        String orderByPart = page.getSort() != null ? page.getSort().toString().replace(":", "") : table.getPrimaryKeyColumn().getName();
+        String orderByPart = page.getSort() != null ? page.getSort().toString().replace(":", "") : table.getPrimaryKeyColumn().getColumnName();
         String selectAllPart = sqlGenerator.selectAll(table);
         return String.format(ROW_NUM_WRAPPER, orderByPart, selectAllPart, beginOffset, endOffset);
     }

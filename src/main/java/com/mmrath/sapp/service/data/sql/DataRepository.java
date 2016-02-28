@@ -103,8 +103,6 @@ public class DataRepository {
         if (logger.isDebugEnabled()) {
             logger.debug("Values {}", Arrays.toString(paramsArray));
         }
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-
         int updatedRows = jdbcOperations.update(con -> {
             PreparedStatement ps = con.prepareStatement(updateSql);
             int colIndex = 0;

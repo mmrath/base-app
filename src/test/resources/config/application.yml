@@ -60,13 +60,10 @@ jhipster:
         queueCapacity: 10000
     security:
         authentication:
-            xauth:
-                secret: myXAuthSecret
+            jwt:
+                secret: jwt-secret-key
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
-        rememberme:
-            # security key (this key should be unique for your application, and kept secret)
-            key: 34286c8688fe8568a6fcded30fe5a7b87ccd8bbd
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
     swagger:

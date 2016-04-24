@@ -211,17 +211,19 @@ public class ApplicationProperties {
 
         public static class Authentication {
 
-            private final Xauth xauth = new Xauth();
+            private final Jwt jwt = new Jwt();
 
-            public Xauth getXauth() {
-                return xauth;
+            public Jwt getJwt() {
+                return jwt;
             }
 
-            public static class Xauth {
+
+            public static class Jwt {
 
                 private String secret;
 
-                private int tokenValidityInSeconds = 1800;
+                private long tokenValidityInSeconds = 1800;
+                private long tokenValidityInSecondsForRememberMe = 2592000;
 
                 public String getSecret() {
                     return secret;
@@ -231,12 +233,20 @@ public class ApplicationProperties {
                     this.secret = secret;
                 }
 
-                public int getTokenValidityInSeconds() {
+                public long getTokenValidityInSeconds() {
                     return tokenValidityInSeconds;
                 }
 
-                public void setTokenValidityInSeconds(int tokenValidityInSeconds) {
+                public void setTokenValidityInSeconds(long tokenValidityInSeconds) {
                     this.tokenValidityInSeconds = tokenValidityInSeconds;
+                }
+
+                public long getTokenValidityInSecondsForRememberMe() {
+                    return tokenValidityInSecondsForRememberMe;
+                }
+
+                public void setTokenValidityInSecondsForRememberMe(long tokenValidityInSecondsForRememberMe) {
+                    this.tokenValidityInSecondsForRememberMe = tokenValidityInSecondsForRememberMe;
                 }
             }
         }

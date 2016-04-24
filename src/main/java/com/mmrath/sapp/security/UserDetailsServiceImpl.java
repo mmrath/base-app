@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
  * Authenticate a user from the database.
  */
 @Component("userDetailsService")
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserDetailsServiceImpl implements org.springframework.security.core.userdetails.UserDetailsService {
 
-    private final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
+    private final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Autowired
     private UserService userService;
@@ -40,7 +40,7 @@ public class UserDetailsService implements org.springframework.security.core.use
                             .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                             .collect(Collectors.toList());
 
-            return new org.springframework.security.core.userdetails.User(lowercaseLogin, null,
+            return new org.springframework.security.core.userdetails.User(lowercaseLogin, "",
                     grantedAuthorities);
 
         }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +

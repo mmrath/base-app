@@ -1,10 +1,10 @@
 package com.mmrath.sapp.security;
 
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,12 +32,12 @@ public class AuthenticationProvider
         if (user == null) {
             throw new UsernameNotFoundException("User does not exists");
         }
-        String password = user.getPassword();
+        /*String password = user.getPassword();
         String tokenPassword = (String) token.getCredentials();
         if (!passwordEncoder.matches(tokenPassword, password)) {
             throw new BadCredentialsException("Invalid username/password");
-        }
-        return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
+        }*/
+        return new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
     }
 
     @Override

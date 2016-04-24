@@ -26,6 +26,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <assertj-core.version>3.2.0</assertj-core.version>
         <awaitility.version>1.4.0</awaitility.version>
+        <jjwt.version>0.6.0</jjwt.version>
     </properties>
 
     <dependencies>
@@ -241,6 +242,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
     </dependencies>
 

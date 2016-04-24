@@ -1,25 +1,23 @@
-package com.mmrath.sapp.security.xauth;
+package com.mmrath.sapp.security.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-public class XAuthTokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class JWTConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+
+    public final static String AUTHORIZATION_HEADER = "Authorization";
 
     private TokenProvider tokenProvider;
 
-    private UserDetailsService detailsService;
-
-    public XAuthTokenConfigurer(UserDetailsService detailsService, TokenProvider tokenProvider) {
-        this.detailsService = detailsService;
+    public JWTConfigurer(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        XAuthTokenFilter customFilter = new XAuthTokenFilter(detailsService, tokenProvider);
+        JWTFilter customFilter = new JWTFilter(tokenProvider);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

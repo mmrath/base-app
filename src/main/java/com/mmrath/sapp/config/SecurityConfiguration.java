@@ -1,9 +1,10 @@
 package com.mmrath.sapp.config;
 
+import com.mmrath.sapp.security.AuthenticationProvider;
 import com.mmrath.sapp.security.AuthoritiesConstants;
 import com.mmrath.sapp.security.Http401UnauthorizedEntryPoint;
-import com.mmrath.sapp.security.xauth.TokenProvider;
-import com.mmrath.sapp.security.xauth.XAuthTokenConfigurer;
+import com.mmrath.sapp.security.jwt.JWTConfigurer;
+import com.mmrath.sapp.security.jwt.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(new AuthenticationProvider(userDetailsService, passwordEncoder()));
     }
 
     @Override
@@ -121,9 +121,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //@formatter:on
     }
 
-    private XAuthTokenConfigurer securityConfigurerAdapter() {
-        return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
     }
+
 
     @Bean
     public SecurityEvaluationContextExtension securityEvaluationContextExtension() {

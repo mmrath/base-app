@@ -46,15 +46,13 @@ jhipster:
         #max-age: 1800
     mail:
         from: jhipster@localhost
+
     security:
         authentication:
-            xauth:
-                secret: myXAuthSecret
-                # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
-        rememberme:
-            # security key (this key should be unique for your application, and kept secret)
-            key: 34286c8688fe8568a6fcded30fe5a7b87ccd8bbd
+            jwt:
+                secret: 508cf5338f98ec5ffd6274f1184944f747f76378
+                # Token is valid 24 hours
+                tokenValidityInSeconds: 86400
     swagger:
         title: Application API
         description: Application API documentation

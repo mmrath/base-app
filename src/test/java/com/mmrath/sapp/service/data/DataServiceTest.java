@@ -75,14 +75,12 @@ public class DataServiceTest extends AbstractIntegrationTest {
         assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.getTotalPages()).isEqualTo(5);
 
-
         //Total less elements than page size
         page = dataService.findAll("role", new PageRequest(0, 120));
         assertThat(page.getContent().size()).isEqualTo(100);
         assertThat(page.getTotalElements()).isEqualTo(100);
         assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.getTotalPages()).isEqualTo(1);
-
 
         //Total less elements than page size
         page = dataService.findAll("role", new PageRequest(0, 100));

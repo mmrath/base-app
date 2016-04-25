@@ -57,12 +57,12 @@ public class TableDefService {
                 TableDef tableDef = new TableDef();
                 List<ColumnDef> columnDefs = getColumnDefFromDb(tableName);
                 tableDef.setColumns(columnDefs);
-                tableDef.setName(tableName);
+                tableDef.setTableName(tableName);
                 String friendlyName = tableName.toLowerCase();
                 if (friendlyName.matches("^\\w_\\w+")) {
                     friendlyName = friendlyName.substring(2);
                 }
-                tableDef.setAlias(friendlyName.replace("_", "-"));
+                tableDef.setCodeName(friendlyName.replace("_", "-"));
                 tableDef.setDisplayLabel(WordUtils.capitalizeFully(friendlyName.replace("_", " ")));
                 tableDef.setUpdatable(true);
                 tableDef.setInsertable(true);
@@ -132,7 +132,7 @@ public class TableDefService {
 
 
             columnDef.setColumnName(columnName);
-            columnDef.setName(alias);
+            columnDef.setCodeName(alias);
             columnDef.setDisplayLabel(columnLabel);
             columnDef.setNullable(nullable);
             columnDef.setLength(dataLength);

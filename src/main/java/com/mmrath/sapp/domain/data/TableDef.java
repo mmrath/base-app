@@ -21,18 +21,18 @@ public class TableDef extends AbstractAuditingEntity<Long> {
 
 
     @Pattern(regexp = "[a-z0-9-]{3,25}",
-            message = "Table alias can only contain lower case letters, number and hyphen")
+            message = "Table code name can only contain lower case letters, number and hyphen")
     @NotNull
     @Size(min = 3, max = 25,
-            message = "Table alias must be of length between {min} and {max} characters")
-    @Column(name = "alias", nullable = false, length = 32, unique = true)
-    private String alias;
+            message = "Table code name must be of length between {min} and {max} characters")
+    @Column(name = "code_name", nullable = false, length = 32, unique = true)
+    private String codeName;
 
     @Pattern(regexp = "[A-Za-z0-9_]*")
     @NotNull
     @Size(min = 3, max = 64)
-    @Column(name = "name", nullable = false, length = 64, unique = true)
-    private String name;
+    @Column(name = "table_name", nullable = false, length = 64, unique = true)
+    private String tableName;
 
     @Column(name = "display_label", nullable = false, length = 64)
     private String displayLabel;
@@ -83,7 +83,7 @@ public class TableDef extends AbstractAuditingEntity<Long> {
 
     @Override
     public String toString() {
-        return "TableDef{" + "id=" + id + ", alias='" + alias + '\'' + ", name='" + name + '\''
+        return "TableDef{" + "id=" + id + ", name='" + codeName + '\'' + ", name='" + tableName + '\''
                 + ", displayLabel='" + displayLabel + '\'' + ", insertable=" + insertable
                 + ", updatable=" + updatable + ", deletable=" + deletable + ", multiSelectable="
                 + multiSelectable + ", columns=" + columns + ", primaryKeyColumn="
@@ -99,20 +99,20 @@ public class TableDef extends AbstractAuditingEntity<Long> {
         this.id = id;
     }
 
-    public String getAlias() {
-        return alias;
+    public String getCodeName() {
+        return codeName;
     }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
     }
 
-    public String getName() {
-        return name;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public String getDisplayLabel() {

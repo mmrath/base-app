@@ -25,8 +25,8 @@ public class ColumnDef implements Serializable {
 
     //A friendly name to hide column name. Can be used in search queries
     @Pattern(regexp = "[a-z][a-zA-Z0-9]+")
-    @Column(name = "name", nullable = false, length = 64)
-    private String name;
+    @Column(name = "code_name", nullable = false, length = 64)
+    private String codeName;
 
     @Column(name = "display_label", nullable = false, length = 64)
     private String displayLabel;
@@ -83,7 +83,7 @@ public class ColumnDef implements Serializable {
                 "id=" + id +
                 ", index=" + index +
                 ", name='" + columnName + '\'' +
-                ", code='" + name + '\'' +
+                ", code='" + codeName + '\'' +
                 ", displayLabel='" + displayLabel + '\'' +
                 ", nullable=" + nullable +
                 ", insertable=" + insertable +
@@ -126,12 +126,12 @@ public class ColumnDef implements Serializable {
         this.columnName = columnName;
     }
 
-    public String getName() {
-        return name;
+    public String getCodeName() {
+        return codeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
     }
 
     public String getDisplayLabel() {

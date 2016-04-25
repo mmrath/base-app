@@ -31,46 +31,46 @@ public class DataService {
     }
 
     public long count(String tableDefId) {
-        return dataRepository.count(getTableDef(tableDefId));
+        return dataRepository.count(getTableDefByCodeName(tableDefId));
     }
 
     public void delete(String alias, Serializable id) {
-        dataRepository.delete(getTableDef(alias), id);
+        dataRepository.delete(getTableDefByCodeName(alias), id);
     }
 
     public void deleteAll(String tableAlias, Iterable<? extends Serializable> ids) {
-        dataRepository.delete(getTableDef(tableAlias), ids);
+        dataRepository.delete(getTableDefByCodeName(tableAlias), ids);
     }
 
     public boolean exists(String tableAlias, Serializable id) {
-        return dataRepository.exists(getTableDef(tableAlias), id);
+        return dataRepository.exists(getTableDefByCodeName(tableAlias), id);
     }
 
     public List<Map<String, Object>> findAll(String tableAlias) {
-        return dataRepository.findAll(getTableDef(tableAlias));
+        return dataRepository.findAll(getTableDefByCodeName(tableAlias));
     }
 
     public Map<String, Object> findOne(String alias, Serializable id) {
-        return dataRepository.findOne(getTableDef(alias), id);
+        return dataRepository.findOne(getTableDefByCodeName(alias), id);
     }
 
     public Map<String, Object> create(String alias, Map<String, Object> values) {
-        TableDef table = getTableDef(alias);
+        TableDef table = getTableDefByCodeName(alias);
         DataValidator.validate(table, values, true);
         return dataRepository.create(table, values);
     }
 
     public Map<String, Object> update(String alias, Map<String, Object> values) {
-        TableDef table = getTableDef(alias);
+        TableDef table = getTableDefByCodeName(alias);
         DataValidator.validate(table, values, false);
-        return dataRepository.update(getTableDef(alias), values);
+        return dataRepository.update(getTableDefByCodeName(alias), values);
     }
 
     public Page<Map<String, Object>> findAll(String alias, Pageable page) {
-        return dataRepository.findAll(getTableDef(alias), null, page);
+        return dataRepository.findAll(getTableDefByCodeName(alias), null, page);
     }
 
-    private TableDef getTableDef(String alias) {
-        return tableDefRepository.findByAlias(alias).get();
+    private TableDef getTableDefByCodeName(String alias) {
+        return tableDefRepository.findByCodeName(alias).get();
     }
 }

@@ -59,7 +59,7 @@ public abstract class DataUtils {
             case VERSION:
                 return 1;
             case REGULAR:
-                return values.get(column.getName());
+                return values.get(column.getCodeName());
             case PRIMARY_KEY:
                 return null;
             default:
@@ -90,9 +90,9 @@ public abstract class DataUtils {
             case LAST_MODIFIED_DATE:
                 return new Date(System.currentTimeMillis());
             case VERSION:
-                return Long.parseLong(values.get(column.getName()).toString()) + 1;
+                return Long.parseLong(values.get(column.getCodeName()).toString()) + 1;
             case REGULAR:
-                return values.get(column.getName());
+                return values.get(column.getCodeName());
             case PRIMARY_KEY:
                 return null;
             default:

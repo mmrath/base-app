@@ -65,17 +65,15 @@ public class TableDefResource {
         tableDefRepository.delete(id);
     }
 
-    @RequestMapping(value = "/search/name", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/table-name", method = RequestMethod.GET)
     @ResponseBody
-    public TableDef searchByName(@RequestParam("name") String name) {
+    public TableDef searchByTableName(@RequestParam("tableName") String name) {
         return tableDefService.getTableDefFromDb(name).get();
     }
 
-    @RequestMapping(value = "/search/alias", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/code-name", method = RequestMethod.GET)
     @ResponseBody
-    public TableDef findByAlias(@RequestParam("alias") String alias) {
-        return tableDefRepository.findByAlias(alias).get();
+    public TableDef findByCodeName(@RequestParam("codeName") String codeName) {
+        return tableDefRepository.findByCodeName(codeName).get();
     }
-
-
 }

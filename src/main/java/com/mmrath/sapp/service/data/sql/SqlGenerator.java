@@ -39,11 +39,11 @@ public class SqlGenerator {
     }
 
     public String count(TableDef table) {
-        return SELECT + "COUNT(*) " + FROM + table.getName();
+        return SELECT + "COUNT(*) " + FROM + table.getTableName();
     }
 
     public String deleteById(TableDef table) {
-        return DELETE + FROM + table.getName() + whereByIdClause(table);
+        return DELETE + FROM + table.getTableName() + whereByIdClause(table);
     }
 
     private String whereByIdClause(TableDef table) {
@@ -65,7 +65,7 @@ public class SqlGenerator {
     }
 
     public String selectAll(TableDef table) {
-        return SELECT + getAllColumnsClause(table) + " " + FROM + table.getName();
+        return SELECT + getAllColumnsClause(table) + " " + FROM + table.getTableName();
     }
 
     public String selectAll(TableDef table, String whereClause, Pageable page) {
@@ -120,7 +120,7 @@ public class SqlGenerator {
     }
 
     public String update(TableDef table) {
-        final StringBuilder updateQuery = new StringBuilder("UPDATE " + table.getName() + " SET ");
+        final StringBuilder updateQuery = new StringBuilder("UPDATE " + table.getTableName() + " SET ");
         List<ColumnDef> columns = table.getColumns();
         boolean columnAdded = false;
         for (Iterator<ColumnDef> iterator = columns.iterator(); iterator.hasNext(); ) {
@@ -143,7 +143,7 @@ public class SqlGenerator {
     }
 
     public String create(TableDef table) {
-        final StringBuilder createQuery = new StringBuilder("INSERT INTO " + table.getName() + " (");
+        final StringBuilder createQuery = new StringBuilder("INSERT INTO " + table.getTableName() + " (");
         List<ColumnDef> columns = table.getColumns();
         boolean columnAdded = false;
         int totalColumnsAdded = 0;
@@ -166,7 +166,7 @@ public class SqlGenerator {
     }
 
     public String deleteAll(TableDef table) {
-        return DELETE + FROM + table.getName();
+        return DELETE + FROM + table.getTableName();
     }
 
     public String countById(TableDef table) {

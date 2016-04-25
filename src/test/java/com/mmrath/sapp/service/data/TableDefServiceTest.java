@@ -20,9 +20,9 @@ public class TableDefServiceTest extends AbstractIntegrationTest {
     public void testGetColumnDefFromDb() throws Exception {
         TableDef tableDef = tableDefService.getTableDefFromDb("T_ROLE").get();
         logger.info("Columns:{}", tableDef);
-        assertThat(tableDef.getName()).matches("T_ROLE");
+        assertThat(tableDef.getTableName()).matches("T_ROLE");
         assertThat(tableDef.getColumns().size()).isGreaterThan(0);
-        assertThat(tableDef.getAlias()).matches("role");
+        assertThat(tableDef.getCodeName()).matches("role");
         assertThat(tableDef.getDisplayLabel()).matches("Role");
     }
 }

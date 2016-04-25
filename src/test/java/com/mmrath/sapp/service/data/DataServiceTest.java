@@ -34,8 +34,8 @@ public class DataServiceTest extends AbstractIntegrationTest {
         values.put("notnullDatetimeCol", new Date());
         values.put("notnullNumberCol", 10);
         values.put("notnullBooleanCol", false);
-        values = dataService.create(table.getAlias(), values);
-        assertThat(values.get(table.getPrimaryKeyColumn().getName())).isNotNull();
+        values = dataService.create(table.getCodeName(), values);
+        assertThat(values.get(table.getPrimaryKeyColumn().getCodeName())).isNotNull();
     }
 
     @Test
@@ -49,19 +49,19 @@ public class DataServiceTest extends AbstractIntegrationTest {
         values.put("notnullNumberCol", 10);
         values.put("notnullBooleanCol", false);
 
-        values = dataService.create(table.getAlias(), values);
+        values = dataService.create(table.getCodeName(), values);
 
         values.put("notnullNumberCol", 20);
-        values = dataService.update(table.getAlias(), values);
+        values = dataService.update(table.getCodeName(), values);
 
-        assertThat(values.get(table.getPrimaryKeyColumn().getName())).isNotNull();
-        assertThat(values.get(table.getVersionColumn().getName())).isEqualTo(2L);
+        assertThat(values.get(table.getPrimaryKeyColumn().getCodeName())).isNotNull();
+        assertThat(values.get(table.getVersionColumn().getCodeName())).isEqualTo(2L);
 
-        Page<Map<String, Object>> page = dataService.findAll(table.getAlias(), new PageRequest(0, 20));
+        Page<Map<String, Object>> page = dataService.findAll(table.getCodeName(), new PageRequest(0, 20));
         assertThat(page.getTotalElements()).isEqualTo(1L);
 
-        dataService.delete(table.getAlias(), (Long) values.get(table.getPrimaryKeyColumn().getName()));
-        page = dataService.findAll(table.getAlias(), new PageRequest(0, 20));
+        dataService.delete(table.getCodeName(), (Long) values.get(table.getPrimaryKeyColumn().getCodeName()));
+        page = dataService.findAll(table.getCodeName(), new PageRequest(0, 20));
         assertThat(page.getTotalElements()).isEqualTo(0L);
     }
 

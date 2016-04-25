@@ -21,7 +21,7 @@ public class DataValidator {
      */
     public static final void validate(TableDef table, Map<String, Object> values, boolean mode) {
         for (ColumnDef column : table.getColumns()) {
-            Object colValue = values.get(column.getName());
+            Object colValue = values.get(column.getCodeName());
             validate(column, colValue, mode);
         }
     }
@@ -45,7 +45,7 @@ public class DataValidator {
     public static final void validate(ColumnDef column, Object value) {
 
         if (!column.getNullable() && value == null) {
-            throw new ValidationException(format("Null/empty value not allowed for %s", column.getName()));
+            throw new ValidationException(format("Null/empty value not allowed for %s", column.getCodeName()));
         }
         if (column.getValidPattern() != null && value != null) {
             if (!Pattern.matches(column.getValidPattern(), value.toString())) {

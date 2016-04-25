@@ -90,14 +90,14 @@ public class DataRepository {
                 .filter(column -> DataUtils.isAllowedInUpdateClause(column))
                 .forEach(column -> {
                     Object value = DataUtils.getValueForUpdate(column, values);
-                    updatedValues.put(column.getName(), value);
+                    updatedValues.put(column.getCodeName(), value);
                     params.add(value);
                 });
-        params.add(values.get(table.getPrimaryKeyColumn().getName()));
-        updatedValues.put(table.getPrimaryKeyColumn().getName(), values.get(table.getPrimaryKeyColumn().getName()));
+        params.add(values.get(table.getPrimaryKeyColumn().getCodeName()));
+        updatedValues.put(table.getPrimaryKeyColumn().getCodeName(), values.get(table.getPrimaryKeyColumn().getCodeName()));
         ColumnDef versionCol = table.getVersionColumn();
         if (versionCol != null) {
-            params.add(values.get(table.getVersionColumn().getName()));
+            params.add(values.get(table.getVersionColumn().getCodeName()));
         }
         final Object[] paramsArray = params.toArray();
         if (logger.isDebugEnabled()) {
@@ -131,7 +131,7 @@ public class DataRepository {
                 .filter(column -> DataUtils.isAllowedInInsertClause(column))
                 .forEach(column -> {
                     Object value = DataUtils.getValueForInsert(column, values);
-                    insertedValues.put(column.getName(), value);
+                    insertedValues.put(column.getCodeName(), value);
                     params.add(value);
                 });
         final Object[] paramsArray = params.toArray();
@@ -150,7 +150,7 @@ public class DataRepository {
             return ps;
         }, keyHolder);
         logger.debug("Generated key: {}", keyHolder.getKey().longValue());
-        insertedValues.put(table.getPrimaryKeyColumn().getName(), keyHolder.getKey().longValue());
+        insertedValues.put(table.getPrimaryKeyColumn().getCodeName(), keyHolder.getKey().longValue());
         return insertedValues;
     }
 

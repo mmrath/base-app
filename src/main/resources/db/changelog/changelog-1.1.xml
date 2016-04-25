@@ -10,10 +10,10 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="code_name" type="VARCHAR(64)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="alias" type="VARCHAR(32)">
+            <column name="table_name" type="VARCHAR(32)">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="display_label" type="VARCHAR(64)">
@@ -65,7 +65,7 @@
             <column name="column_name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="code_name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="display_label" type="VARCHAR(64)">
@@ -109,7 +109,7 @@
 
         </createTable>
         <addUniqueConstraint constraintName="column_def_uk1" tableName="t_column_def"
-                             columnNames="table_id,name"/>
+                             columnNames="table_id,code_name"/>
         <addUniqueConstraint constraintName="column_def_uk2" tableName="t_column_def"
                              columnNames="table_id,index"/>
         <addUniqueConstraint constraintName="column_def_uk3" tableName="t_column_def"

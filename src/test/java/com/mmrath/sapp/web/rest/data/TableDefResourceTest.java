@@ -38,17 +38,17 @@ public class TableDefResourceTest extends AbstractWebIntegrationTest {
     }
 
     @Test
-    public void testSearchByName() throws Exception {
-        mockMvc.perform(get("/api/table/search/name").param("name", "T_ROLE"))
+    public void testSearchByTableName() throws Exception {
+        mockMvc.perform(get("/api/table/search/table-name").param("tableName", "T_ROLE"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(jsonPath("$.name").value("T_ROLE"));
+                .andExpect(jsonPath("$.tableName").value("T_ROLE"));
     }
 
     @Test
     public void testSearchByNameShouldThrow404IfNotFound() throws Exception {
-        mockMvc.perform(get("/api/table/search/name").param("name", "T_ROL"))
+        mockMvc.perform(get("/api/table/search/table-name").param("tableName", "T_ROL"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(MockMvcResultHandlers.print());

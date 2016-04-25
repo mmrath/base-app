@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface TableDefRepository extends JpaRepository<TableDef, Long> {
 
-    Optional<TableDef> findByAlias(String alias);
+    Optional<TableDef> findByCodeName(String codeName);
 }

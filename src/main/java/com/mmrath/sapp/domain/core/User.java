@@ -29,10 +29,8 @@ public class User extends AbstractAuditingEntity<Long> {
     private static final long serialVersionUID = 1L;
 
     @JsonIgnore
-    @OneToOne(optional = true, cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "t_user_credential",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "credential_id"))
+    @PrimaryKeyJoinColumn
+    @OneToOne(cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
     public Credential credential;
 
     @Id
@@ -58,6 +56,10 @@ public class User extends AbstractAuditingEntity<Long> {
     @Column(nullable = false)
     private Boolean enabled;
 
+    @Size(min = 2, max = 5)
+    @Column(name = "lang_key", length = 5)
+    private String langKey;
+
     @ManyToMany
     @JoinTable(name = "t_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
@@ -71,6 +73,7 @@ public class User extends AbstractAuditingEntity<Long> {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +
+                ", langKey='" + langKey + '\'' +
                 ", roles=" + roles +
                 ", " + super.toString() +
                 "}";
@@ -123,6 +126,14 @@ public class User extends AbstractAuditingEntity<Long> {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
     }
 
     public List<Role> getRoles() {

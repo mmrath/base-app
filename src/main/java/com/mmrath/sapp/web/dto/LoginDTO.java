@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 /**
  * A DTO representing a user's credentials
  */
-public class LoginDTO {
+public class LoginDto {
 
     @Pattern(regexp = "^[a-z0-9]*$")
     @NotNull

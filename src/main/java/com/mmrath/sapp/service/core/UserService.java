@@ -4,9 +4,13 @@ import com.mmrath.sapp.domain.core.Credential;
 import com.mmrath.sapp.domain.core.Permission;
 import com.mmrath.sapp.domain.core.Role;
 import com.mmrath.sapp.domain.core.User;
-import com.mmrath.sapp.repository.core.UserCredentialRepository;
+import com.mmrath.sapp.repository.core.CredentialRepository;
 import com.mmrath.sapp.repository.core.UserRepository;
+import com.mmrath.sapp.security.SecurityUtils;
 import com.mmrath.sapp.service.util.PasswordUtils;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,23 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Component
 public class UserService {
-
+    private final Logger log = LoggerFactory.getLogger(MailService.class);
     private final UserRepository userRepository;
-    private final UserCredentialRepository userCredentialRepository;
+    private final CredentialRepository credentialRepository;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       UserCredentialRepository userCredentialRepository) {
+                       CredentialRepository credentialRepository) {
         this.userRepository = userRepository;
-        this.userCredentialRepository = userCredentialRepository;
+        this.credentialRepository = credentialRepository;
     }
 
     @Transactional
@@ -107,11 +108,44 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Credential findUserCredential(Long userId) {
-        Credential credential = userCredentialRepository.findOne(userId);
+        Credential credential = credentialRepository.findOne(userId);
         return credential;
     }
 
-    public User register(User user) {
+    @Transactional
+    public User createUserInformation(String username, String password, String firstName, String lastName, String email,
+                                      String langKey) {
+        User newUser = new User();
+
+        newUser.setUsername(username);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setEmail(email);
+        newUser.setLangKey(langKey);
+        newUser.setEnabled(true);
+        Credential credential = new Credential();
+        credential.setPassword(password);
+
+        registerInternal(newUser);
+        log.debug("Created information for User: {}", newUser);
+        return newUser;
+    }
+
+    @Transactional
+    public Optional<User> activateRegistration(String key) {
+        log.debug("Activating user for activation key {}", key);
+        return credentialRepository.findOneByActivationKey(key)
+                .map(credential -> {
+                    // activate given user for the registration key.
+                    credential.setActivated(true);
+                    credential.setActivationKey(null);
+                    credentialRepository.save(credential);
+                    log.debug("Activated user with activation key: {}", key);
+                    return credential.getUser();
+                });
+    }
+
+    private User registerInternal(User user) {
         if (user.getCredential() != null && StringUtils.hasText(user.getCredential().getPassword())) {
             Credential credential = user.getCredential();
             String salt = PasswordUtils.generateSalt();
@@ -119,12 +153,69 @@ public class UserService {
             credential.setSalt(salt);
             String encodedPassword = PasswordUtils.encodePassword(password, salt);
             credential.setPassword(encodedPassword);
-            Date expiryDate = new Date(System.currentTimeMillis() + 365 * 24 * 60 * 100);
-            credential.setExpiryDate(expiryDate.toInstant().atZone(ZoneId.systemDefault()));
-            credential.setInvalidAttempts(3);
-            userCredentialRepository.saveAndFlush(user.getCredential());
+            credential.setExpiryDate(null);
+            credential.setInvalidAttempts(0);
+            credential.setActivationKey(UUID.randomUUID().toString()+System.currentTimeMillis());
+            credential.setActivated(false);
+            credentialRepository.saveAndFlush(user.getCredential());
         }
         user = userRepository.save(user);
+        return user;
+    }
+
+    @Transactional
+    public Optional<User> changePassword(String password) {
+        return userRepository.findOneByUsername(SecurityUtils.getCurrentUserLogin())
+                .map(user -> {
+                    Credential credential = user.getCredential();
+                    String encodedPassword = PasswordUtils.encodePassword(password, credential.getSalt());
+                    credential.setPassword(encodedPassword);
+                    credentialRepository.save(credential);
+                    return user;
+                });
+    }
+
+    @Transactional
+    public Optional<User> requestPasswordReset(String mail) {
+        return userRepository.findOneByEmail(mail)
+                .filter(user -> user.getCredential().getActivated())
+                .map(user -> {
+                    Credential credential = user.getCredential();
+                    credential.setResetKey(UUID.randomUUID().toString()+System.currentTimeMillis());
+                    credential.setResetDate(ZonedDateTime.now());
+                    credentialRepository.save(credential);
+                    return user;
+                });
+    }
+
+    @Transactional
+    public Optional<User> completePasswordReset(String newPassword, String key) {
+        log.debug("Reset user password for reset key {}", key);
+
+        return credentialRepository.findOneByResetKey(key)
+                .filter(user -> {
+                    ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
+                    return user.getResetDate().isAfter(oneDayAgo);
+                })
+                .map(credential -> {
+                    String salt = PasswordUtils.generateSalt();
+                    credential.setSalt(salt);
+                    String encodedPassword = PasswordUtils.encodePassword(newPassword, salt);
+                    credential.setPassword(encodedPassword);
+                    credential.setExpiryDate(null);
+                    credential.setInvalidAttempts(0);
+                    credential.setResetKey(null);
+                    credential.setResetDate(null);
+                    credential.setActivationKey(null);
+                    credentialRepository.save(credential);
+                    return credential.getUser();
+                });
+    }
+
+    @Transactional(readOnly = true)
+    public User getLoggedInUserWithRole() {
+        User user = userRepository.findOneByUsername(SecurityUtils.getCurrentUserLogin()).get();
+        user.getRoles().size(); // eagerly load the association
         return user;
     }
 }

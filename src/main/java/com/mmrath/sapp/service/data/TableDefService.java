@@ -134,8 +134,6 @@ public class TableDefService {
             columnDef.setColumnName(columnName);
             columnDef.setCodeName(alias);
             columnDef.setDisplayLabel(columnLabel);
-            columnDef.setNullable(nullable);
-            columnDef.setLength(dataLength);
             columnDef.setColumnType(getColumnType(columnName, dataType));
             columnDef.setDataType(getDataType(dataType, dataLength, precision));
             LOGGER.debug("Column {}, SQL Data type is {}, and derived data type {}", columnName,
@@ -149,15 +147,10 @@ public class TableDefService {
             if (columnDef.getColumnType() != null
                     && columnDef.getColumnType() != ColumnType.REGULAR) {
                 columnDef.setShowInList(false);
-                columnDef.setInsertable(false);
-                columnDef.setUpdatable(false);
-                columnDef.setNullable(false);
                 columnDef.setSearchable(false);
                 columnDef.setSortable(false);
             } else {
                 columnDef.setShowInList(true);
-                columnDef.setInsertable(true);
-                columnDef.setUpdatable(true);
                 columnDef.setSearchable(true);
                 columnDef.setSortable(true);
             }

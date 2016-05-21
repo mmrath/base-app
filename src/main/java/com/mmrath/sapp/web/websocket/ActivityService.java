@@ -1,7 +1,7 @@
 package com.mmrath.sapp.web.websocket;
 
 import com.mmrath.sapp.security.SecurityUtils;
-import com.mmrath.sapp.web.dto.ActivityData;
+import com.mmrath.sapp.web.dto.ActivityDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
 
     @SubscribeMapping("/topic/activity")
     @SendTo("/topic/tracker")
-    public ActivityData sendActivity(@Payload ActivityData activityData, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
+    public ActivityDto sendActivity(@Payload ActivityDto activityData, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
         activityData.setUserLogin(SecurityUtils.getCurrentUserLogin());
         activityData.setUserLogin(principal.getName());
         activityData.setSessionId(stompHeaderAccessor.getSessionId());
@@ -46,7 +46,7 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
-        ActivityData activityData = new ActivityData();
+        ActivityDto activityData = new ActivityDto();
         activityData.setSessionId(event.getSessionId());
         activityData.setPage("logout");
         messagingTemplate.convertAndSend("/topic/tracker", activityData);

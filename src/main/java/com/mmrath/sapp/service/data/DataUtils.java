@@ -19,7 +19,7 @@ public abstract class DataUtils {
             case VERSION:
                 return true;
             case REGULAR:
-                return columnDef.getInsertable();
+                return true;
             case PRIMARY_KEY:
                 return false;
             default:
@@ -37,7 +37,7 @@ public abstract class DataUtils {
             case VERSION:
                 return true;
             case REGULAR:
-                return columnDef.getUpdatable();
+                return true;
             case PRIMARY_KEY:
                 return false;
             default:

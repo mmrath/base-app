@@ -2,7 +2,7 @@
 # Spring Boot configuration.
 #
 # This configuration will be overriden by the Spring profile you use,
-# for example application-local.yml if you use the "dev" profile.
+# for example application-dev.yml if you use the "dev" profile.
 # ===================================================================
 
 # ===================================================================
@@ -11,18 +11,41 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+management:
+    context-path: /management
+
 spring:
+    application:
+        name: MUSA
     jpa:
+        open-in-view: false
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
     messages:
-        basename: classpath:/i18n/messages
+        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
     thymeleaf:
         mode: XHTML
+    social:
+        # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
+        google:
+            clientId: xxx
+            clientSecret: xxx
+
+        # see https://developers.facebook.com/docs/facebook-login/v2.2
+        facebook:
+            clientId: xxx
+            clientSecret: xxx
+
+        # see https://apps.twitter.com/app/
+        twitter:
+            clientId: xxx
+            clientSecret: xxx
+
+        # jhipster-needle-add-social-configuration
 
 security:
     basic:
@@ -45,19 +68,19 @@ jhipster:
         #allow-credentials: true
         #max-age: 1800
     mail:
-        from: jhipster@localhost
-
-    security:
-        authentication:
-            jwt:
-                secret: 508cf5338f98ec5ffd6274f1184944f747f76378
-                # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
+        from: MUSA@localhost
     swagger:
-        title: Application API
-        description: Application API documentation
+        title: MUSA API
+        description: MUSA API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:
+    social:
+        redirectAfterSignIn: "/#/social-auth"
+    ribbon:
+        # comma seperated list of profiles to show a ribbon on the GUI
+        displayOnActiveProfiles: dev

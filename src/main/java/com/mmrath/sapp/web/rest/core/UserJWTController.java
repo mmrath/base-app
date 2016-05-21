@@ -3,7 +3,7 @@ package com.mmrath.sapp.web.rest.core;
 import com.codahale.metrics.annotation.Timed;
 import com.mmrath.sapp.security.jwt.JWTConfigurer;
 import com.mmrath.sapp.security.jwt.TokenProvider;
-import com.mmrath.sapp.web.dto.LoginDTO;
+import com.mmrath.sapp.web.dto.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class UserJWTController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     @Timed
-    public ResponseEntity<?> authorize(@Valid @RequestBody LoginDTO loginDTO, HttpServletResponse response) {
+    public ResponseEntity<?> authorize(@Valid @RequestBody LoginDto loginDTO, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());

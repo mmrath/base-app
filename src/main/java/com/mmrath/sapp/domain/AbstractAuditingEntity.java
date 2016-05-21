@@ -46,6 +46,17 @@ public abstract class AbstractAuditingEntity<T extends Serializable> implements 
     @JsonIgnore
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 
+    @Override
+    public String toString() {
+        return "AbstractAuditingEntity{" +
+                "createdBy='" + createdBy + '\'' +
+                ", createdDate=" + createdDate +
+                ", lastModifiedBy='" + lastModifiedBy + '\'' +
+                ", lastModifiedDate=" + lastModifiedDate +
+                ", version=" + version +
+                '}';
+    }
+
     @Version
     private Integer version;
 

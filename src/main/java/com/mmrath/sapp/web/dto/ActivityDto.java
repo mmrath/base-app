@@ -3,7 +3,7 @@ package com.mmrath.sapp.web.dto;
 /**
  * DTO for storing a user's activity.
  */
-public class ActivityData {
+public class ActivityDto {
 
     private String sessionId;
 

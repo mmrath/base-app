@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class UserData {
+public class UserDto {
 
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 100;
@@ -34,22 +34,26 @@ public class UserData {
     @Size(min = 5, max = 100)
     private String email;
 
-    public UserData() {
+    @Size(min = 2, max = 5)
+    private String langKey;
+
+    public UserDto() {
     }
 
-    public UserData(User user) {
+    public UserDto(User user) {
         this(user.getUsername(), null, user.getFirstName(), user.getLastName(),
-                user.getEmail());
+                user.getEmail(), null);
     }
 
-    public UserData(String login, String password, String firstName, String lastName,
-                    String email) {
+    public UserDto(String login, String password, String firstName, String lastName,
+                   String email, String langKey) {
 
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.langKey = langKey;
     }
 
     public String getPassword() {
@@ -72,6 +76,13 @@ public class UserData {
         return email;
     }
 
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
+    }
 
     @Override
     public String toString() {
@@ -81,6 +92,7 @@ public class UserData {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", langKey='" + langKey + '\'' +
                 "}";
     }
 }

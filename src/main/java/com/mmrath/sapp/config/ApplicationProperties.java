@@ -15,11 +15,10 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "jhipster", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
+
     private final Async async = new Async();
 
     private final Http http = new Http();
-
-    private final Datasource datasource = new Datasource();
 
     private final Cache cache = new Cache();
 
@@ -33,6 +32,10 @@ public class ApplicationProperties {
 
     private final CorsConfiguration cors = new CorsConfiguration();
 
+    private final Social social = new Social();
+
+    private final Ribbon ribbon = new Ribbon();
+    private final Logging logging = new Logging();
 
     public Async getAsync() {
         return async;
@@ -40,10 +43,6 @@ public class ApplicationProperties {
 
     public Http getHttp() {
         return http;
-    }
-
-    public Datasource getDatasource() {
-        return datasource;
     }
 
     public Cache getCache() {
@@ -70,6 +69,17 @@ public class ApplicationProperties {
         return cors;
     }
 
+    public Social getSocial() {
+        return social;
+    }
+
+    public Ribbon getRibbon() {
+        return ribbon;
+    }
+
+    public Logging getLogging() {
+        return logging;
+    }
 
     public static class Async {
 
@@ -114,7 +124,7 @@ public class ApplicationProperties {
 
         public static class Cache {
 
-            private int timeToLiveInDays = 31;
+            private int timeToLiveInDays = 1461;
 
             public int getTimeToLiveInDays() {
                 return timeToLiveInDays;
@@ -123,49 +133,6 @@ public class ApplicationProperties {
             public void setTimeToLiveInDays(int timeToLiveInDays) {
                 this.timeToLiveInDays = timeToLiveInDays;
             }
-        }
-    }
-
-    public static class Datasource {
-
-        private boolean cachePrepStmts = true;
-
-        private int prepStmtCacheSize = 250;
-
-        private int prepStmtCacheSqlLimit = 2048;
-
-        private boolean useServerPrepStmts = true;
-
-        public boolean isCachePrepStmts() {
-            return cachePrepStmts;
-        }
-
-        public void setCachePrepStmts(boolean cachePrepStmts) {
-            this.cachePrepStmts = cachePrepStmts;
-        }
-
-        public int getPrepStmtCacheSize() {
-            return prepStmtCacheSize;
-        }
-
-        public void setPrepStmtCacheSize(int prepStmtCacheSize) {
-            this.prepStmtCacheSize = prepStmtCacheSize;
-        }
-
-        public int getPrepStmtCacheSqlLimit() {
-            return prepStmtCacheSqlLimit;
-        }
-
-        public void setPrepStmtCacheSqlLimit(int prepStmtCacheSqlLimit) {
-            this.prepStmtCacheSqlLimit = prepStmtCacheSqlLimit;
-        }
-
-        public boolean isUseServerPrepStmts() {
-            return useServerPrepStmts;
-        }
-
-        public void setUseServerPrepStmts(boolean useServerPrepStmts) {
-            this.useServerPrepStmts = useServerPrepStmts;
         }
     }
 
@@ -184,7 +151,7 @@ public class ApplicationProperties {
 
     public static class Mail {
 
-        private String from = "jhipster@localhost";
+        private String from = "MUSA@localhost";
 
         public String getFrom() {
             return from;
@@ -197,13 +164,7 @@ public class ApplicationProperties {
 
     public static class Security {
 
-        private final Rememberme rememberme = new Rememberme();
-
         private final Authentication authentication = new Authentication();
-
-        public Rememberme getRememberme() {
-            return rememberme;
-        }
 
         public Authentication getAuthentication() {
             return authentication;
@@ -216,7 +177,6 @@ public class ApplicationProperties {
             public Jwt getJwt() {
                 return jwt;
             }
-
 
             public static class Jwt {
 
@@ -250,37 +210,29 @@ public class ApplicationProperties {
                 }
             }
         }
-
-        public static class Rememberme {
-
-            @NotNull
-            private String key;
-
-            public String getKey() {
-                return key;
-            }
-
-            public void setKey(String key) {
-                this.key = key;
-            }
-        }
     }
 
     public static class Swagger {
 
-        private String title = "Application API";
+        private String title = "MUSA API";
 
-        private String description = "Application API documentation";
+        private String description = "MUSA API documentation";
 
         private String version = "0.0.1";
 
         private String termsOfServiceUrl;
 
-        private String contact;
+        private String contactName;
+
+        private String contactUrl;
+
+        private String contactEmail;
 
         private String license;
 
         private String licenseUrl;
+
+        private Boolean enabled;
 
         public String getTitle() {
             return title;
@@ -314,12 +266,28 @@ public class ApplicationProperties {
             this.termsOfServiceUrl = termsOfServiceUrl;
         }
 
-        public String getContact() {
-            return contact;
+        public String getContactName() {
+            return contactName;
         }
 
-        public void setContact(String contact) {
-            this.contact = contact;
+        public void setContactName(String contactName) {
+            this.contactName = contactName;
+        }
+
+        public String getContactUrl() {
+            return contactUrl;
+        }
+
+        public void setContactUrl(String contactUrl) {
+            this.contactUrl = contactUrl;
+        }
+
+        public String getContactEmail() {
+            return contactEmail;
+        }
+
+        public void setContactEmail(String contactEmail) {
+            this.contactEmail = contactEmail;
         }
 
         public String getLicense() {
@@ -337,6 +305,14 @@ public class ApplicationProperties {
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
         }
+
+        public Boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
     }
 
     public static class Metrics {
@@ -346,6 +322,8 @@ public class ApplicationProperties {
         private final Spark spark = new Spark();
 
         private final Graphite graphite = new Graphite();
+
+        private final Logs logs = new Logs();
 
         public Jmx getJmx() {
             return jmx;
@@ -358,6 +336,11 @@ public class ApplicationProperties {
         public Graphite getGraphite() {
             return graphite;
         }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
 
         public static class Jmx {
 
@@ -413,7 +396,7 @@ public class ApplicationProperties {
 
             private int port = 2003;
 
-            private String prefix = "jhipster";
+            private String prefix = "MUSA";
 
             public boolean isEnabled() {
                 return enabled;
@@ -447,5 +430,108 @@ public class ApplicationProperties {
                 this.prefix = prefix;
             }
         }
+
+        public static class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(int reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
     }
+
+    public static class Logging {
+
+        private final Logstash logstash = new Logstash();
+
+        public Logstash getLogstash() {
+            return logstash;
+        }
+
+        public static class Logstash {
+
+            private boolean enabled = false;
+
+            private String host = "localhost";
+
+            private int port = 5000;
+
+            private int queueSize = 512;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getHost() {
+                return host;
+            }
+
+            public void setHost(String host) {
+                this.host = host;
+            }
+
+            public int getPort() {
+                return port;
+            }
+
+            public void setPort(int port) {
+                this.port = port;
+            }
+
+            public int getQueueSize() {
+                return queueSize;
+            }
+
+            public void setQueueSize(int queueSize) {
+                this.queueSize = queueSize;
+            }
+        }
+
+    }
+
+    public static class Social {
+
+        private String redirectAfterSignIn = "/#/home";
+
+        public String getRedirectAfterSignIn() {
+            return redirectAfterSignIn;
+        }
+
+        public void setRedirectAfterSignIn(String redirectAfterSignIn) {
+            this.redirectAfterSignIn = redirectAfterSignIn;
+        }
+    }
+
+    public static class Ribbon {
+
+        private String[] displayOnActiveProfiles;
+
+        public String[] getDisplayOnActiveProfiles() {
+            return displayOnActiveProfiles;
+        }
+
+        public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
+            this.displayOnActiveProfiles = displayOnActiveProfiles;
+        }
+    }
+
 }

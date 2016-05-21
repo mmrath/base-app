@@ -2,7 +2,7 @@ package com.mmrath.sapp.web.rest.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
+/**`
  * Object to return as body in JWT Authentication
  */
 public class JWTToken {

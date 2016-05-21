@@ -23,7 +23,6 @@ public class DataServiceTest extends AbstractIntegrationTest {
     @Autowired
     private DataService dataService;
 
-
     @Test
     public void testSave() {
         TableDef table = prepareTableDef("test_table1");

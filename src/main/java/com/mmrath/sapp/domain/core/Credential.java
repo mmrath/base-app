@@ -3,6 +3,8 @@ package com.mmrath.sapp.domain.core;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
@@ -13,8 +15,13 @@ public class Credential implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @JsonIgnore
+    @JoinColumn(name = "id")
+    @OneToOne
+    @MapsId
+    private User user;
 
     @JsonIgnore
     private String salt;
@@ -22,7 +29,7 @@ public class Credential implements Serializable {
     @JsonIgnore
     private String password;
 
-    @Column(name = "expiry_date", nullable = false)
+    @Column(name = "expiry_date", nullable = true)
     private ZonedDateTime expiryDate;
 
     @Column(name = "invalid_attempts", nullable = false)
@@ -30,6 +37,38 @@ public class Credential implements Serializable {
 
     @Column(name = "locked", nullable = false)
     private Boolean locked;
+
+    @Size(max = 64)
+    @Column(name = "activation_key", length = 64)
+    @JsonIgnore
+    private String activationKey;
+
+    @NotNull
+    @Column(nullable = false)
+    private Boolean activated = false;
+
+    @Size(max = 64)
+    @Column(name = "reset_key", length = 64)
+    private String resetKey;
+
+    @Column(name = "reset_date", nullable = true)
+    private ZonedDateTime resetDate = null;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getSalt() {
         return salt;
@@ -71,12 +110,55 @@ public class Credential implements Serializable {
         this.locked = locked;
     }
 
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
+    }
+
+    public String getResetKey() {
+        return resetKey;
+    }
+
+    public void setResetKey(String resetKey) {
+        this.resetKey = resetKey;
+    }
+
+    public ZonedDateTime getResetDate() {
+        return resetDate;
+    }
+
+    public void setResetDate(ZonedDateTime resetDate) {
+        this.resetDate = resetDate;
+    }
+
     @Override
     public String toString() {
         return "Credential{" +
-                "expiryDate=" + expiryDate +
+                "id=" + id +
+                ", salt='" + salt + '\'' +
+                ", password='" + password + '\'' +
+                ", expiryDate=" + expiryDate +
                 ", invalidAttempts=" + invalidAttempts +
                 ", locked=" + locked +
+                ", activationKey='" + activationKey + '\'' +
+                ", activated=" + activated +
+                ", resetKey='" + resetKey + '\'' +
+                ", resetDate=" + resetDate +
                 '}';
     }
 }

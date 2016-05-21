@@ -34,8 +34,8 @@ public class DataService {
         return dataRepository.count(getTableDefByCodeName(tableDefId));
     }
 
-    public void delete(String alias, Serializable id) {
-        dataRepository.delete(getTableDefByCodeName(alias), id);
+    public int delete(String alias, Serializable id) {
+        return dataRepository.delete(getTableDefByCodeName(alias), id);
     }
 
     public void deleteAll(String tableAlias, Iterable<? extends Serializable> ids) {

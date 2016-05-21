@@ -71,7 +71,8 @@ public class ExceptionTranslator {
         ErrorData dto = new ErrorData(ErrorConstants.ERR_VALIDATION);
 
         for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
+
+            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
         }
 
         return dto;

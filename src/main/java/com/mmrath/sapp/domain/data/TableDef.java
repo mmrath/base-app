@@ -83,11 +83,18 @@ public class TableDef extends AbstractAuditingEntity<Long> {
 
     @Override
     public String toString() {
-        return "TableDef{" + "id=" + id + ", name='" + codeName + '\'' + ", name='" + tableName + '\''
-                + ", displayLabel='" + displayLabel + '\'' + ", insertable=" + insertable
-                + ", updatable=" + updatable + ", deletable=" + deletable + ", multiSelectable="
-                + multiSelectable + ", columns=" + columns + ", primaryKeyColumn="
-                + primaryKeyColumn + '}';
+        return "TableDef{" +
+                "id=" + id +
+                ", codeName='" + codeName + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", displayLabel='" + displayLabel + '\'' +
+                ", insertable=" + insertable +
+                ", updatable=" + updatable +
+                ", deletable=" + deletable +
+                ", multiSelectable=" + multiSelectable +
+                ", columns=" + columns +
+                ", primaryKeyColumn=" + primaryKeyColumn +
+                super.toString() + "} ";
     }
 
     @Override

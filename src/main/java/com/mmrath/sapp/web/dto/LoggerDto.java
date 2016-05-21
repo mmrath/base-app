@@ -3,19 +3,19 @@ package com.mmrath.sapp.web.dto;
 import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class LoggerData {
+public class LoggerDto {
 
     private String name;
 
     private String level;
 
-    public LoggerData(Logger logger) {
+    public LoggerDto(Logger logger) {
         this.name = logger.getName();
         this.level = logger.getEffectiveLevel().toString();
     }
 
     @JsonCreator
-    public LoggerData() {
+    public LoggerDto() {
     }
 
     public String getName() {

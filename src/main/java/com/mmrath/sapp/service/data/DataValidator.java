@@ -34,23 +34,5 @@ public class DataValidator {
         if (column.getColumnType() == ColumnType.VERSION && !insertMode && colValue == null) {
             throw new ValidationException("Version column value is required for updating value");
         }
-
-        if (!DataUtils.isAuditColumn(column)) {
-            if ((column.getInsertable() && insertMode) || (column.getUpdatable() && !insertMode)) {
-                validate(column, colValue);
-            }
-        }
-    }
-
-    public static final void validate(ColumnDef column, Object value) {
-
-        if (!column.getNullable() && value == null) {
-            throw new ValidationException(format("Null/empty value not allowed for %s", column.getCodeName()));
-        }
-        if (column.getValidPattern() != null && value != null) {
-            if (!Pattern.matches(column.getValidPattern(), value.toString())) {
-                throw new ValidationException(column.getValidPatternMessage());
-            }
-        }
     }
 }

@@ -45,8 +45,10 @@ public class DataRepository {
         return jdbcOperations.queryForObject(sqlGenerator.count(table), Long.class);
     }
 
-    public void delete(TableDef table, Serializable id) {
-        jdbcOperations.update(sqlGenerator.deleteById(table), id);
+    public int delete(TableDef table, Serializable id) {
+        String deleteSql = sqlGenerator.deleteById(table);
+        logger.debug("Delete SQL:[{}]", deleteSql);
+        return jdbcOperations.update(deleteSql, id);
     }
 
     public void delete(TableDef table, Iterable<? extends Serializable> ids) {
@@ -168,6 +170,7 @@ public class DataRepository {
 
             for (ColumnDef column : table.getColumns()) {
                 String columnName = column.getColumnName();
+                String columnCodeName = column.getCodeName();
                 DataType dataType = column.getDataType();
                 Object value;
                 if (dataType == DataType.BOOLEAN) {
@@ -191,7 +194,7 @@ public class DataRepository {
                 } else {
                     value = rs.getObject(columnName);
                 }
-                map.put(columnName, value);
+                map.put(columnCodeName, value);
             }
             return map;
         }

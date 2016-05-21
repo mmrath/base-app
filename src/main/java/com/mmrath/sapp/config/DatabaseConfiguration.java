@@ -1,16 +1,13 @@
 package com.mmrath.sapp.config;
 
 import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.mmrath.sapp.config.liquibase.AsyncSpringLiquibase;
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
@@ -112,10 +109,5 @@ public class DatabaseConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
-    @Bean
-    public Hibernate4Module hibernate4Module() {
-        Hibernate4Module module = new Hibernate4Module();
-        module.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
-        return module;
-    }
+
 }

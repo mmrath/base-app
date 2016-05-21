@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <changeSet author="murali" id="1.0.0">
         <createTable tableName="t_resource">
@@ -88,12 +88,12 @@
             <column name="email" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="enabled" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="last_name" type="VARCHAR(255)"/>
             <column name="lang_key" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="TIMESTAMP">
@@ -196,6 +196,9 @@
             </column>
             <column name="reset_date" type="TIMESTAMP">
                 <constraints nullable="true"/>
+            </column>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
             </column>
         </createTable>
         <addPrimaryKey columnNames="id" constraintName="pk_credential"

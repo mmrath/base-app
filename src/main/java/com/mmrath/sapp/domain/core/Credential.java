@@ -54,6 +54,9 @@ public class Credential implements Serializable {
     @Column(name = "reset_date", nullable = true)
     private ZonedDateTime resetDate = null;
 
+    @Version
+    private long version;
+
     public Long getId() {
         return id;
     }
@@ -146,12 +149,18 @@ public class Credential implements Serializable {
         this.resetDate = resetDate;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
     @Override
     public String toString() {
         return "Credential{" +
                 "id=" + id +
-                ", salt='" + salt + '\'' +
-                ", password='" + password + '\'' +
                 ", expiryDate=" + expiryDate +
                 ", invalidAttempts=" + invalidAttempts +
                 ", locked=" + locked +
@@ -159,6 +168,7 @@ public class Credential implements Serializable {
                 ", activated=" + activated +
                 ", resetKey='" + resetKey + '\'' +
                 ", resetDate=" + resetDate +
+                ", version=" + version +
                 '}';
     }
 }

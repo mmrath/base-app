@@ -18,9 +18,9 @@ spring:
         livereload:
             enabled: false
     datasource:
-        url: jdbc:mysql://localhost:3306/MUSA?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/sapp?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
-        username: root
+        username: sapp
         password:
         hikari:
             data-source-properties:

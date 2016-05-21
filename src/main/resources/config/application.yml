@@ -16,7 +16,7 @@ management:
 
 spring:
     application:
-        name: MUSA
+        name: SAPP
     jpa:
         open-in-view: false
         hibernate:
@@ -68,10 +68,10 @@ jhipster:
         #allow-credentials: true
         #max-age: 1800
     mail:
-        from: MUSA@localhost
+        from: sapp@localhost
     swagger:
-        title: MUSA API
-        description: MUSA API documentation
+        title: SAPP API
+        description: SAPP API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contactName:

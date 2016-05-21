@@ -14,9 +14,9 @@ spring:
     application:
         name: MUSA
     datasource:
-        url: jdbc:h2:mem:MUSA;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:sapp;DB_CLOSE_DELAY=-1
         name:
-        username:
+        username: sapp
         password:
     jpa:
         database-platform: com.mmrath.sapp.domain.util.FixedH2Dialect

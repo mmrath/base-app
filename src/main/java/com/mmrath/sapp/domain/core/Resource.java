@@ -17,24 +17,12 @@ import javax.validation.constraints.Size;
 public class Resource {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
     @Size(min = 3, max = 64)
     @Pattern(regexp = "[A-Z0-9_]*")
     private String name;
 
     @Column(nullable = false, length = 255)
     private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

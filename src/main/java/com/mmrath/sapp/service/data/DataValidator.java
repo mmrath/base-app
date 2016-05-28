@@ -5,9 +5,6 @@ import com.mmrath.sapp.domain.data.ColumnType;
 import com.mmrath.sapp.domain.data.TableDef;
 
 import java.util.Map;
-import java.util.regex.Pattern;
-
-import static java.lang.String.format;
 
 public class DataValidator {
 

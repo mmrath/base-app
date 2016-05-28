@@ -26,16 +26,16 @@ public class PermissionService {
         return permissionRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
     }
 
-    public Map<Long, Map<AccessLevel, Permission>> findPermissionGroups() {
-        Map<Long, Map<AccessLevel, Permission>> permissionGroups = new TreeMap<>();
+    public Map<String, Map<AccessLevel, Permission>> findPermissionGroups() {
+        Map<String, Map<AccessLevel, Permission>> permissionGroups = new TreeMap<>();
 
         List<Permission> permissions = permissionRepository.findAll(new Sort(Sort.Direction.ASC, "resource", "id"));
         permissions.forEach(
                 permission -> {
-                    if (!permissionGroups.containsKey(permission.getResource().getId())) {
-                        permissionGroups.put(permission.getResource().getId(), new HashMap<>());
+                    if (!permissionGroups.containsKey(permission.getResource().getName())) {
+                        permissionGroups.put(permission.getResource().getName(), new HashMap<>());
                     }
-                    permissionGroups.get(permission.getResource().getId()).put(permission.getAccessLevel(), permission);
+                    permissionGroups.get(permission.getResource().getName()).put(permission.getAccessLevel(), permission);
                 });
 
 

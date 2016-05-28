@@ -1,27 +1,14 @@
 package com.mmrath.sapp.domain.core;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mmrath.sapp.domain.AbstractAuditingEntity;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.mmrath.sapp.domain.AbstractAuditingEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Model object that represents a security role.
@@ -59,8 +46,8 @@ public class Role extends AbstractAuditingEntity<Long> {
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "t_role_permission", joinColumns = @JoinColumn(name = "role_id") ,
-            inverseJoinColumns = @JoinColumn(name = "permission_id") )
+    @JoinTable(name = "t_role_permission", joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();
 
     @Override

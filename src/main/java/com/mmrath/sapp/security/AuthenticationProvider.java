@@ -16,7 +16,7 @@ public class AuthenticationProvider
     private UserDetailsService userDetailsService;
 
     public AuthenticationProvider(UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder) {
+                                  PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }

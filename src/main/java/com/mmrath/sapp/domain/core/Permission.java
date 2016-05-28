@@ -15,7 +15,7 @@ public class Permission implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "resource_id", updatable = false, nullable = false)
+    @JoinColumn(name = "resource", updatable = false, nullable = false)
     private Resource resource;
 
     @Enumerated(EnumType.STRING)

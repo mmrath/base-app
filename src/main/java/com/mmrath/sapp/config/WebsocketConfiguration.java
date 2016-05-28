@@ -1,10 +1,6 @@
 package com.mmrath.sapp.config;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
+import com.mmrath.sapp.security.AuthoritiesConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -20,7 +16,10 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
-import com.mmrath.sapp.security.AuthoritiesConstants;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -39,7 +38,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
                 .setHandshakeHandler(new DefaultHandshakeHandler() {
                     @Override
                     protected Principal determineUser(ServerHttpRequest request,
-                            WebSocketHandler wsHandler, Map<String, Object> attributes) {
+                                                      WebSocketHandler wsHandler, Map<String, Object> attributes) {
                         Principal principal = request.getPrincipal();
                         if (principal == null) {
                             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -59,7 +58,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
             @Override
             public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+                                           WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
                 if (request instanceof ServletServerHttpRequest) {
                     ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
                     attributes.put(IP_ADDRESS, servletRequest.getRemoteAddress());
@@ -69,7 +68,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
             @Override
             public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                    WebSocketHandler wsHandler, Exception exception) {
+                                       WebSocketHandler wsHandler, Exception exception) {
 
             }
         };

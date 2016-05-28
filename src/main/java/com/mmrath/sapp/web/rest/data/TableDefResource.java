@@ -25,7 +25,7 @@ public class TableDefResource {
 
     @Autowired
     public TableDefResource(TableDefRepository tableDefRepository,
-            TableDefService tableDefService) {
+                            TableDefService tableDefService) {
         this.tableDefRepository = tableDefRepository;
         this.tableDefService = tableDefService;
     }

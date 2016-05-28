@@ -35,7 +35,7 @@ spring:
             clientId: xxx
             clientSecret: xxx
 
-        # see https://developers.facebook.com/docs/facebook-login/v2.2
+        # see https://developers.facebook.com/docs/facebook-username/v2.2
         facebook:
             clientId: xxx
             clientSecret: xxx

@@ -138,7 +138,33 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
 
     @Test
     @Transactional
-    public void testRegisterValid() throws Exception {
+    public void testRegisterValidWithEmailAsLogin() throws Exception {
+        ManagedUserDto validUser = new ManagedUserDto(
+                null,                   // id
+                "joe3@test.com",                  // login
+                "password",             // password
+                "Joe",                  // firstName
+                "Shmoe",                // lastName
+                "joe@example.com",      // e-mail
+                "en",               // langKey
+                null,                   // createdDate
+                null,                   // lastModifiedBy
+                null                    // lastModifiedDate
+        );
+
+        restMvc.perform(
+                post("/api/register")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(validUser)))
+                .andExpect(status().isCreated());
+
+        Optional<User> user = userRepository.findOneByLogin("joe3@test.com");
+        assertThat(user.isPresent()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void testRegisterValidWithUsernameAsLogin() throws Exception {
         ManagedUserDto validUser = new ManagedUserDto(
                 null,                   // id
                 "joe3",                  // login
@@ -158,7 +184,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> user = userRepository.findOneByUsername("joe3");
+        Optional<User> user = userRepository.findOneByLogin("joe3");
         assertThat(user.isPresent()).isTrue();
     }
 
@@ -210,7 +236,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
                 .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByUsername("bob");
+        Optional<User> user = userRepository.findOneByLogin("bob");
         assertThat(user.isPresent()).isFalse();
     }
 
@@ -236,7 +262,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
                 .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByUsername("bob");
+        Optional<User> user = userRepository.findOneByLogin("bob");
         assertThat(user.isPresent()).isFalse();
     }
 
@@ -314,7 +340,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
                 .andExpect(status().is4xxClientError());
 
-        Optional<User> userDup = userRepository.findOneByUsername("johnjr");
+        Optional<User> userDup = userRepository.findOneByLogin("johnjr");
         assertThat(userDup.isPresent()).isFalse();
     }
 
@@ -341,7 +367,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneByUsername("badguy");
+        Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getRoles()).hasSize(0);
     }

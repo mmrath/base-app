@@ -8,7 +8,6 @@ import com.mmrath.sapp.repository.core.CredentialRepository;
 import com.mmrath.sapp.repository.core.UserRepository;
 import com.mmrath.sapp.security.SecurityUtils;
 import com.mmrath.sapp.service.util.PasswordUtils;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @Component
 public class UserService {
@@ -81,7 +84,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> findUserByUsername(String loginId) {
-        Optional<User> optionalUser = userRepository.findOneByUsername(loginId);
+        Optional<User> optionalUser = userRepository.findOneByLogin(loginId);
         return optionalUser;
     }
 
@@ -121,11 +124,15 @@ public class UserService {
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setEmail(email);
+        if (!hasText(langKey)) {
+            langKey = "en"; //Default
+        }
         newUser.setLangKey(langKey);
         newUser.setEnabled(true);
         Credential credential = new Credential();
         credential.setPassword(password);
-
+        newUser.setCredential(credential);
+        credential.setUser(newUser);
         registerInternal(newUser);
         log.debug("Created information for User: {}", newUser);
         return newUser;
@@ -146,26 +153,27 @@ public class UserService {
     }
 
     private User registerInternal(User user) {
-        if (user.getCredential() != null && StringUtils.hasText(user.getCredential().getPassword())) {
+        if (user.getCredential() != null && hasText(user.getCredential().getPassword())) {
             Credential credential = user.getCredential();
             String salt = PasswordUtils.generateSalt();
             String password = credential.getPassword();
             credential.setSalt(salt);
             String encodedPassword = PasswordUtils.encodePassword(password, salt);
             credential.setPassword(encodedPassword);
+            credential.setLocked(false);
             credential.setExpiryDate(null);
             credential.setInvalidAttempts(0);
-            credential.setActivationKey(UUID.randomUUID().toString()+System.currentTimeMillis());
+            credential.setActivationKey(UUID.randomUUID().toString() + System.currentTimeMillis());
             credential.setActivated(false);
-            credentialRepository.saveAndFlush(user.getCredential());
         }
         user = userRepository.save(user);
+        credentialRepository.save(user.credential);
         return user;
     }
 
     @Transactional
     public Optional<User> changePassword(String password) {
-        return userRepository.findOneByUsername(SecurityUtils.getCurrentUserLogin())
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentLoggedInUsername())
                 .map(user -> {
                     Credential credential = user.getCredential();
                     String encodedPassword = PasswordUtils.encodePassword(password, credential.getSalt());
@@ -181,7 +189,7 @@ public class UserService {
                 .filter(user -> user.getCredential().getActivated())
                 .map(user -> {
                     Credential credential = user.getCredential();
-                    credential.setResetKey(UUID.randomUUID().toString()+System.currentTimeMillis());
+                    credential.setResetKey(UUID.randomUUID().toString() + System.currentTimeMillis());
                     credential.setResetDate(ZonedDateTime.now());
                     credentialRepository.save(credential);
                     return user;
@@ -214,7 +222,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getLoggedInUserWithRole() {
-        User user = userRepository.findOneByUsername(SecurityUtils.getCurrentUserLogin()).get();
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLoggedInUsername()).get();
         user.getRoles().size(); // eagerly load the association
         return user;
     }

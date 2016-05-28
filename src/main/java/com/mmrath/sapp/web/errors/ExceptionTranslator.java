@@ -25,28 +25,28 @@ public class ExceptionTranslator {
     @ExceptionHandler(ConcurrencyFailureException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    public ErrorData processConcurencyError(ConcurrencyFailureException ex) {
-        return new ErrorData(ErrorConstants.ERR_CONCURRENCY_FAILURE);
+    public ErrorDto processConcurencyError(ConcurrencyFailureException ex) {
+        return new ErrorDto(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorData processEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
-        return new ErrorData(ErrorConstants.ERR_NO_DATA_FOUND);
+    public ErrorDto processEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        return new ErrorDto(ErrorConstants.ERR_NO_DATA_FOUND);
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorData processNoSuchElementException(NoSuchElementException ex) {
-        return new ErrorData(ErrorConstants.ERR_NO_DATA_FOUND);
+    public ErrorDto processNoSuchElementException(NoSuchElementException ex) {
+        return new ErrorDto(ErrorConstants.ERR_NO_DATA_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorData processValidationError(MethodArgumentNotValidException ex) {
+    public ErrorDto processValidationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
 
@@ -56,19 +56,19 @@ public class ExceptionTranslator {
     @ExceptionHandler(CustomParameterizedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ParameterizedErrorData processParameterizedValidationError(CustomParameterizedException ex) {
+    public ParameterizedErrorDto processParameterizedValidationError(CustomParameterizedException ex) {
         return ex.getErrorDTO();
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public ErrorData processAccessDeniedExcpetion(AccessDeniedException e) {
-        return new ErrorData(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
+    public ErrorDto processAccessDeniedExcpetion(AccessDeniedException e) {
+        return new ErrorDto(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
     }
 
-    private ErrorData processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorData dto = new ErrorData(ErrorConstants.ERR_VALIDATION);
+    private ErrorDto processFieldErrors(List<FieldError> fieldErrors) {
+        ErrorDto dto = new ErrorDto(ErrorConstants.ERR_VALIDATION);
 
         for (FieldError fieldError : fieldErrors) {
 
@@ -81,7 +81,7 @@ public class ExceptionTranslator {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorData processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return new ErrorData(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
+    public ErrorDto processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+        return new ErrorDto(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
     }
 }

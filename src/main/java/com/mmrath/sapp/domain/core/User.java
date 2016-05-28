@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "t_user")
-@NamedQueries({@NamedQuery(name = User.QUERY_FIND_BY_USER_NAME,
-        query = "select t from User t where lower(t.username) = lower(:username)"),
+@NamedQueries({@NamedQuery(name = User.QUERY_FIND_BY_LOGIN,
+        query = "select t from User t where lower(t.login) = lower(:login)"),
         @NamedQuery(name = User.QUERY_FIND_ROLES,
                 query = "select t.roles from User t where t.id = :id"),
         @NamedQuery(name = User.QUERY_FIND_ALL_PERMISSIONS,
@@ -20,7 +20,7 @@ import java.util.List;
                         + "where u.id = :id and ( r member of u.roles and p member of r.permissions)")})
 public class User extends AbstractAuditingEntity<Long> {
 
-    public static final String QUERY_FIND_BY_USER_NAME = "User.findByUsernameQ";
+    public static final String QUERY_FIND_BY_LOGIN = "User.findByLogin";
 
     public static final String QUERY_FIND_ROLES = "User.findRoles";
 
@@ -37,19 +37,25 @@ public class User extends AbstractAuditingEntity<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Pattern(regexp = "[\\w_\\.]+")
-    @Column(name = "username", length = 30, unique = true, nullable = false)
+    @Pattern(regexp = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,}))?",
+            message = "Invalid username")
+    @Column(name = "login", length = 64, unique = true, nullable = false)
     @Size(min = 4, max = 30)
-    private String username;
+    private String login;
 
-    @Column(name = "first_name")
-    @Pattern(regexp = "[\\w_\\.]+")
+    @Size(max = 50)
+    @Column(name = "first_name", nullable = false)
+    @Pattern(regexp = "[\\p{L} .'-]+", message = "Invalid first name")
     private String firstName;
 
+    @Size(max = 50)
     @Column(name = "last_name")
-    @Pattern(regexp = "[\\w_\\.]+")
+    @Pattern(regexp = "[\\p{L} .'-]*", message = "Invalid last name")
     private String lastName;
 
+    @Size(max = 64)
+    @Pattern(regexp = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})",
+            message = "Invalid email address")
     @Column(name = "email", unique = true, length = 64, nullable = false)
     private String email;
 
@@ -68,7 +74,7 @@ public class User extends AbstractAuditingEntity<Long> {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", login='" + login + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -88,12 +94,12 @@ public class User extends AbstractAuditingEntity<Long> {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String login) {
+        this.login = login;
     }
 
     public String getFirstName() {

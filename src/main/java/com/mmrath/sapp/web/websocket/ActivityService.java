@@ -34,8 +34,8 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
     @SubscribeMapping("/topic/activity")
     @SendTo("/topic/tracker")
     public ActivityDto sendActivity(@Payload ActivityDto activityData, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
-        activityData.setUserLogin(SecurityUtils.getCurrentUserLogin());
-        activityData.setUserLogin(principal.getName());
+        activityData.setUsername(SecurityUtils.getCurrentLoggedInUsername());
+        activityData.setUsername(principal.getName());
         activityData.setSessionId(stompHeaderAccessor.getSessionId());
         activityData.setIpAddress(stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString());
         Instant instant = Instant.ofEpochMilli(Calendar.getInstance().getTimeInMillis());

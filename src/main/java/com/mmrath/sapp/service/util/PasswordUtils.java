@@ -41,7 +41,7 @@ public abstract class PasswordUtils {
     }
 
     public static final boolean isPasswordValid(String encodedPassword, String password,
-            String salt) {
+                                                String salt) {
 
         String passwordSaltedEncoded = encodePassword(password, salt);
         return encodedPassword.equals(passwordSaltedEncoded);

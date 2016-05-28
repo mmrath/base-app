@@ -56,7 +56,6 @@ public class ColumnDef implements Serializable {
     private String headerTemplate;
 
 
-
     @Override
     public String toString() {
         return "ColumnDef{" +

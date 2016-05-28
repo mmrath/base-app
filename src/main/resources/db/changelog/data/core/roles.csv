@@ -1,0 +1,3 @@
+id,name,description,created_by,created_date,last_modified_by,version
+1,SUPER_USER,Super user role,system,2000-01-01T00:00:00,system,0
+2,CUSTOMER,Customer role,system,2000-01-01T00:00:00,system,0

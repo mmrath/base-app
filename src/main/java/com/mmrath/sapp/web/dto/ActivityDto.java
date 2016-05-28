@@ -7,7 +7,7 @@ public class ActivityDto {
 
     private String sessionId;
 
-    private String userLogin;
+    private String username;
 
     private String ipAddress;
 
@@ -23,12 +23,12 @@ public class ActivityDto {
         this.sessionId = sessionId;
     }
 
-    public String getUserLogin() {
-        return userLogin;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getIpAddress() {
@@ -59,7 +59,7 @@ public class ActivityDto {
     public String toString() {
         return "ActivityData{" +
                 "sessionId='" + sessionId + '\'' +
-                ", userLogin='" + userLogin + '\'' +
+                ", username='" + username + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", page='" + page + '\'' +
                 ", time='" + time + '\'' +

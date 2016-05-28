@@ -45,6 +45,8 @@ public abstract class AbstractAuditingEntity<T extends Serializable> implements 
     @Column(name = "last_modified_date")
     @JsonIgnore
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+    @Version
+    private Integer version;
 
     @Override
     public String toString() {
@@ -56,9 +58,6 @@ public abstract class AbstractAuditingEntity<T extends Serializable> implements 
                 ", version=" + version +
                 '}';
     }
-
-    @Version
-    private Integer version;
 
     public abstract T getId();
 

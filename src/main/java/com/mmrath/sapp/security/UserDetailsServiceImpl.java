@@ -29,10 +29,10 @@ public class UserDetailsServiceImpl implements org.springframework.security.core
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String login) {
-        log.debug("Authenticating {}", login);
-        String lowercaseLogin = login.toLowerCase();
-        Optional<User> userFromDatabase = userService.findUserByUsername(lowercaseLogin);
+    public UserDetails loadUserByUsername(final String username) {
+        log.debug("Authenticating {}", username);
+        String lowercaseUsername = username.toLowerCase();
+        Optional<User> userFromDatabase = userService.findUserByUsername(lowercaseUsername);
         return userFromDatabase.map(user -> {
 
             List<GrantedAuthority> grantedAuthorities =
@@ -40,10 +40,10 @@ public class UserDetailsServiceImpl implements org.springframework.security.core
                             .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                             .collect(Collectors.toList());
 
-            return new org.springframework.security.core.userdetails.User(lowercaseLogin, "",
+            return new org.springframework.security.core.userdetails.User(lowercaseUsername, "",
                     grantedAuthorities);
 
-        }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
+        }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseUsername + " was not found in the " +
                 "database"));
     }
 }

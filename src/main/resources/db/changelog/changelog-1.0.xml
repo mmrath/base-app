@@ -7,9 +7,7 @@
 
     <changeSet author="murali" id="1.0.0">
         <createTable tableName="t_resource">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false"/>
-            </column>
+
             <column name="name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
@@ -17,10 +15,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey columnNames="id" constraintName="pk_resource"
+        <addPrimaryKey columnNames="name" constraintName="pk_resource"
                        tableName="t_resource"/>
-        <addUniqueConstraint columnNames="name" constraintName="uk_resource"
-                             tableName="t_resource"/>
     </changeSet>
 
     <changeSet author="murali" id="1.0.1">
@@ -28,7 +24,7 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="resource_id" type="BIGINT">
+            <column name="resource" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="access_level" type="VARCHAR(64)">
@@ -40,7 +36,7 @@
         </createTable>
         <addPrimaryKey columnNames="id" constraintName="pk_permission"
                        tableName="t_permission"/>
-        <addUniqueConstraint columnNames="resource_id,access_level" constraintName="uk_permission"
+        <addUniqueConstraint columnNames="resource,access_level" constraintName="uk_permission"
                              tableName="t_permission"/>
     </changeSet>
 
@@ -61,7 +57,7 @@
             <column name="created_by" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_date" type="TIMESTAMP">
+            <column name="last_modified_date" type="TIMESTAMP" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="VARCHAR(64)">
@@ -82,14 +78,16 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="username" type="VARCHAR(30)">
+            <column name="login" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="VARCHAR(64)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="first_name" type="VARCHAR(255)"/>
-            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
             <column name="lang_key" type="VARCHAR(5)">
                 <constraints nullable="false"/>
             </column>
@@ -102,7 +100,7 @@
             <column name="created_by" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_date" type="TIMESTAMP">
+            <column name="last_modified_date" type="TIMESTAMP" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="VARCHAR(64)">
@@ -113,10 +111,10 @@
             </column>
         </createTable>
         <addPrimaryKey columnNames="id" constraintName="pk_user" tableName="t_user"/>
-        <addUniqueConstraint columnNames="username" constraintName="uk_user_01"
+        <addUniqueConstraint columnNames="login" constraintName="uk_user_01_login"
                              deferrable="false" disabled="false" initiallyDeferred="false"
                              tableName="t_user"/>
-        <addUniqueConstraint columnNames="email" constraintName="uk_user_02" tableName="t_user"/>
+        <addUniqueConstraint columnNames="email" constraintName="uk_user_02_email" tableName="t_user"/>
     </changeSet>
     <changeSet author="murali" id="1.0.4">
         <createTable tableName="t_role_permission">
@@ -176,9 +174,7 @@
             <column name="password" type="VARCHAR(128)">
                 <constraints nullable="false"/>
             </column>
-            <column name="expiry_date" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="expiry_date" type="TIMESTAMP"/>
             <column name="invalid_attempts" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
@@ -207,6 +203,35 @@
 
     <changeSet id="1.0.7" author="murali">
 
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/users.csv"
+                  separator=","
+                  tableName="t_user">
+            <column name="enabled" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </loadData>
+
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/credentials.csv"
+                  separator=","
+                  tableName="t_credential">
+            <column name="locked" type="boolean"/>
+            <column name="activated" type="boolean"/>
+        </loadData>
+
+
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/resources/resources_v01.csv"
+                  separator=","
+                  tableName="t_resource">
+        </loadData>
+
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/permissions/permissions_v01.csv"
+                  separator=","
+                  tableName="t_permission">
+        </loadData>
 
     </changeSet>
     <changeSet author="murali" id="1.0.8">
@@ -220,13 +245,13 @@
             <column name="description" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="TIMESTAMP">
+            <column name="created_date" type="TIMESTAMP" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
             <column name="created_by" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_date" type="TIMESTAMP">
+            <column name="last_modified_date" type="TIMESTAMP" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="VARCHAR(64)">
@@ -414,10 +439,25 @@
                                  referencedTableName="t_user"/>
 
     </changeSet>
-    
+
     <changeSet id="1.0.19" author="murali">
-        <sqlFile path="data/core/resource_v1.0.sql" relativeToChangelogFile="true"></sqlFile>
-        <sqlFile path="data/core/permission_v1.0.sql" relativeToChangelogFile="true"></sqlFile>
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/roles.csv"
+                  separator=","
+                  tableName="t_role">
+        </loadData>
+
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/role_permissions.csv"
+                  separator=","
+                  tableName="t_role_permission">
+        </loadData>
+
+        <loadData encoding="UTF-8"
+                  file="db/changelog/data/core/user_roles.csv"
+                  separator=","
+                  tableName="t_user_role">
+        </loadData>
     </changeSet>
 
 

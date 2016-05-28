@@ -15,7 +15,7 @@ public class LoginDto {
     private String username;
 
     @NotNull
-    @Size(min = 4, max = 20)
+    @Size(min = 4, max = 30)
     private String password;
 
     private Boolean rememberMe;

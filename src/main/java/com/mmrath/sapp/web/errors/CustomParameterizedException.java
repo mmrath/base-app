@@ -27,8 +27,8 @@ public class CustomParameterizedException extends RuntimeException {
         this.params = params;
     }
 
-    public ParameterizedErrorData getErrorDTO() {
-        return new ParameterizedErrorData(message, params);
+    public ParameterizedErrorDto getErrorDTO() {
+        return new ParameterizedErrorDto(message, params);
     }
 
 }

@@ -29,7 +29,7 @@ public class Credential implements Serializable {
     @JsonIgnore
     private String password;
 
-    @Column(name = "expiry_date", nullable = true)
+    @Column(name = "expiry_date")
     private ZonedDateTime expiryDate;
 
     @Column(name = "invalid_attempts", nullable = false)
@@ -55,7 +55,7 @@ public class Credential implements Serializable {
     private ZonedDateTime resetDate = null;
 
     @Version
-    private long version;
+    private int version;
 
     public Long getId() {
         return id;
@@ -109,16 +109,20 @@ public class Credential implements Serializable {
         return locked;
     }
 
-    public void setLocked(Boolean locked) {
-        this.locked = locked;
-    }
-
     public Boolean getLocked() {
         return locked;
     }
 
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
+    }
+
     public String getActivationKey() {
         return activationKey;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
     }
 
     public Boolean getActivated() {
@@ -127,10 +131,6 @@ public class Credential implements Serializable {
 
     public void setActivated(Boolean activated) {
         this.activated = activated;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
     }
 
     public String getResetKey() {
@@ -149,11 +149,11 @@ public class Credential implements Serializable {
         this.resetDate = resetDate;
     }
 
-    public long getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

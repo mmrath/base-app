@@ -59,7 +59,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/index.html")
                 .antMatchers("/test/**")
                 .antMatchers("/console/**");
-        if (env.acceptsProfiles("local")) {
+
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             //http.authorizeRequests()
             //  .antMatchers("/api/**").hasIpAddress("127.0.0.1");
             web.ignoring().antMatchers("/api/**");
@@ -69,16 +70,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        if (env.acceptsProfiles("local")) {
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             //http.authorizeRequests()
             //    .antMatchers("/api/**").hasIpAddress("127.0.0.1");
-            return;
+            //return;
         }
         //@formatter:off
         http.exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)
             .and()
                 .csrf()
+                //.csrfTokenRepository(new CookieCsrfTokenRepository())
                 .disable()
                 .headers()
                 .frameOptions()

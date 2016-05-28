@@ -3,7 +3,6 @@ package com.mmrath.sapp.web.dto;
 import com.mmrath.sapp.domain.core.User;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 /**
  * A DTO extending the UserData, which is meant to be used in the user management UI.
@@ -18,8 +17,9 @@ public class ManagedUserDto extends UserDto {
 
     private ZonedDateTime lastModifiedDate;
 
-    public ManagedUserDto(){
+    public ManagedUserDto() {
     }
+
     public ManagedUserDto(Long id, String login, String password, String firstName, String lastName,
                           String email, String langKey, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate) {
 

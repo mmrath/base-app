@@ -7,5 +7,6 @@ public enum AccessLevel {
     READ,
     CREATE,
     UPDATE,
-    DELETE
+    DELETE,
+    ADMIN
 }

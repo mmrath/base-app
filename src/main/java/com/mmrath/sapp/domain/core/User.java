@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "t_user")
 @NamedQueries({@NamedQuery(name = User.QUERY_FIND_BY_LOGIN,
-        query = "select t from User t where lower(t.login) = lower(:login)"),
+        query = "select t from User t where lower(t.username) = lower(:username)"),
         @NamedQuery(name = User.QUERY_FIND_ROLES,
                 query = "select t.roles from User t where t.id = :id"),
         @NamedQuery(name = User.QUERY_FIND_ALL_PERMISSIONS,
@@ -39,9 +39,9 @@ public class User extends AbstractAuditingEntity<Long> {
 
     @Pattern(regexp = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,}))?",
             message = "Invalid username")
-    @Column(name = "login", length = 64, unique = true, nullable = false)
+    @Column(name = "username", length = 64, unique = true, nullable = false)
     @Size(min = 4, max = 30)
-    private String login;
+    private String username;
 
     @Size(max = 50)
     @Column(name = "first_name", nullable = false)
@@ -74,7 +74,7 @@ public class User extends AbstractAuditingEntity<Long> {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
+                ", username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -94,12 +94,12 @@ public class User extends AbstractAuditingEntity<Long> {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String login) {
-        this.login = login;
+        this.username = login;
     }
 
     public String getFirstName() {

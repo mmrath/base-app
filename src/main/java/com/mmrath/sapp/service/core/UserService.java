@@ -84,7 +84,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> findUserByUsername(String loginId) {
-        Optional<User> optionalUser = userRepository.findOneByLogin(loginId);
+        Optional<User> optionalUser = userRepository.findOneByUsername(loginId);
         return optionalUser;
     }
 
@@ -173,7 +173,7 @@ public class UserService {
 
     @Transactional
     public Optional<User> changePassword(String password) {
-        return userRepository.findOneByLogin(SecurityUtils.getCurrentLoggedInUsername())
+        return userRepository.findOneByUsername(SecurityUtils.getCurrentLoggedInUsername())
                 .map(user -> {
                     Credential credential = user.getCredential();
                     String encodedPassword = PasswordUtils.encodePassword(password, credential.getSalt());
@@ -222,7 +222,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getLoggedInUserWithRole() {
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLoggedInUsername()).get();
+        User user = userRepository.findOneByUsername(SecurityUtils.getCurrentLoggedInUsername()).get();
         user.getRoles().size(); // eagerly load the association
         return user;
     }

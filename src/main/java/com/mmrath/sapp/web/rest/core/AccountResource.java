@@ -62,7 +62,7 @@ public class AccountResource {
 
         return userRepository.findOneByEmail(managedUserDto.getEmail().toLowerCase())
                 .map(user -> new ResponseEntity<>(new FieldErrorDto("email", "Email address already registered"), HttpStatus.BAD_REQUEST))
-                .orElseGet(() -> userRepository.findOneByLogin(managedUserDto.getLogin())
+                .orElseGet(() -> userRepository.findOneByUsername(managedUserDto.getLogin())
                         .map(user -> new ResponseEntity<>(new FieldErrorDto("login", "Login not available"), HttpStatus.BAD_REQUEST))
                         .orElseGet(() -> {
                             User user = userService.createUserInformation(managedUserDto.getLogin(), managedUserDto.getPassword(),
@@ -139,11 +139,11 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> saveAccount(@Valid @RequestBody UserDto userDto) {
         Optional<User> existingUser = userRepository.findOneByEmail(userDto.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userDto.getLogin()))) {
+        if (existingUser.isPresent() && (!existingUser.get().getUsername().equalsIgnoreCase(userDto.getLogin()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
         }
         return userRepository
-                .findOneByLogin(SecurityUtils.getCurrentLoggedInUsername())
+                .findOneByUsername(SecurityUtils.getCurrentLoggedInUsername())
                 .map(user -> {
                     user.setFirstName(userDto.getFirstName());
                     user.setLastName(userDto.getLastName());

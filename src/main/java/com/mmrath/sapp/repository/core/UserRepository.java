@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
-    Optional<User> findOneByLogin(String username);
+    Optional<User> findOneByUsername(String username);
     Optional<User> findOneByEmail(String email);
 
 }

@@ -158,7 +158,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> user = userRepository.findOneByLogin("joe3@test.com");
+        Optional<User> user = userRepository.findOneByUsername("joe3@test.com");
         assertThat(user.isPresent()).isTrue();
     }
 
@@ -184,7 +184,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> user = userRepository.findOneByLogin("joe3");
+        Optional<User> user = userRepository.findOneByUsername("joe3");
         assertThat(user.isPresent()).isTrue();
     }
 
@@ -236,7 +236,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
                 .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByLogin("bob");
+        Optional<User> user = userRepository.findOneByUsername("bob");
         assertThat(user.isPresent()).isFalse();
     }
 
@@ -262,7 +262,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
                 .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByLogin("bob");
+        Optional<User> user = userRepository.findOneByUsername("bob");
         assertThat(user.isPresent()).isFalse();
     }
 
@@ -340,7 +340,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                         .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
                 .andExpect(status().is4xxClientError());
 
-        Optional<User> userDup = userRepository.findOneByLogin("johnjr");
+        Optional<User> userDup = userRepository.findOneByUsername("johnjr");
         assertThat(userDup.isPresent()).isFalse();
     }
 
@@ -367,7 +367,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneByLogin("badguy");
+        Optional<User> userDup = userRepository.findOneByUsername("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getRoles()).hasSize(0);
     }

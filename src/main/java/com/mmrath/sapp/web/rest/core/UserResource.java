@@ -51,7 +51,7 @@ public class UserResource {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public User update(@PathVariable("id") Long id, @RequestBody User user) {
+    public User update(@PathVariable("id") Long id, @Valid @RequestBody User user) {
         logger.debug("User to update:{}", user);
         user = userService.updateUser(user);
         return user;

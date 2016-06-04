@@ -3,6 +3,8 @@ package com.mmrath.sapp.service.util;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.UUID;
+
 /**
  * Utility class for generating random Strings.
  */
@@ -28,7 +30,7 @@ public final class RandomUtil {
      * @return the generated activation key
      */
     public static String generateActivationKey() {
-        return RandomStringUtils.randomNumeric(DEF_COUNT);
+        return generateRandomUid();
     }
 
     /**
@@ -37,6 +39,11 @@ public final class RandomUtil {
      * @return the generated reset key
      */
     public static String generateResetKey() {
-        return RandomStringUtils.randomNumeric(DEF_COUNT);
+        return generateRandomUid();
+    }
+
+    public static String generateRandomUid(){
+        String key = UUID.randomUUID().toString().replace("-","") + System.currentTimeMillis();
+        return key + RandomStringUtils.randomAlphanumeric(5);
     }
 }

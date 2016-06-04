@@ -8,6 +8,7 @@ import com.mmrath.sapp.repository.core.CredentialRepository;
 import com.mmrath.sapp.repository.core.UserRepository;
 import com.mmrath.sapp.security.SecurityUtils;
 import com.mmrath.sapp.service.util.PasswordUtils;
+import com.mmrath.sapp.service.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.springframework.util.StringUtils.hasText;
+
 
 @Component
 public class UserService {
@@ -163,7 +164,7 @@ public class UserService {
             credential.setLocked(false);
             credential.setExpiryDate(null);
             credential.setInvalidAttempts(0);
-            credential.setActivationKey(UUID.randomUUID().toString() + System.currentTimeMillis());
+            credential.setActivationKey(RandomUtil.generateActivationKey());
             credential.setActivated(false);
         }
         user = userRepository.save(user);
@@ -189,7 +190,7 @@ public class UserService {
                 .filter(user -> user.getCredential().getActivated())
                 .map(user -> {
                     Credential credential = user.getCredential();
-                    credential.setResetKey(UUID.randomUUID().toString() + System.currentTimeMillis());
+                    credential.setResetKey(RandomUtil.generateResetKey());
                     credential.setResetDate(ZonedDateTime.now());
                     credentialRepository.save(credential);
                     return user;

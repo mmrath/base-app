@@ -107,9 +107,9 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public String isAuthenticated(HttpServletRequest request) {
+    public User isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
+        return userService.getLoggedInUserWithRole();
     }
 
     /**

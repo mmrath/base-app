@@ -63,11 +63,9 @@ jhipster:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
     security:
-        authentication:
-            jwt:
-                secret: 3c9ff28ca7a3f1fd747463cb5e856fd300131828
-                # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
+        rememberMe:
+            # security key (this key should be unique for your application, and kept secret)
+            key: 646d6e0423129c85b6f00b5df8c7c79c3b721c77
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: MUSA@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

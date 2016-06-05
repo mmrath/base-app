@@ -11,6 +11,7 @@ import com.mmrath.sapp.web.dto.UserDto;
 import com.mmrath.sapp.web.rest.AbstractWebIntegrationTest;
 import com.mmrath.sapp.web.rest.TestUtil;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -85,6 +86,7 @@ public class AccountResourceIntTest extends AbstractWebIntegrationTest {
                 .andExpect(content().string(""));
     }
 
+    @Ignore //FIXIT to test return of logged in user
     @Test
     public void testAuthenticatedUser() throws Exception {
         restUserMockMvc.perform(get("/api/authenticate")

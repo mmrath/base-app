@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Copied from https://github.com/nurkiewicz/spring-data-jdbc-repository
@@ -77,7 +78,7 @@ public class SqlGenerator {
         if (StringUtils.hasText(whereClause)) {
             sql = sql + WHERE + whereClause;
         }
-        return sql + sortingClauseIfRequired(sort);
+        return sql + sortingClauseIfRequired(table, sort);
     }
 
     protected String limitClause(Pageable page) {
@@ -100,7 +101,7 @@ public class SqlGenerator {
         }
     }
 
-    protected String sortingClauseIfRequired(Sort sort) {
+    protected String sortingClauseIfRequired(TableDef table, Sort sort) {
         if (sort == null) {
             return "";
         }
@@ -108,10 +109,14 @@ public class SqlGenerator {
         orderByClause.append(" ORDER BY ");
         for (Iterator<Sort.Order> iterator = sort.iterator(); iterator.hasNext(); ) {
             final Sort.Order order = iterator.next();
-            orderByClause.
-                    append(order.getProperty()).
-                    append(" ").
-                    append(order.getDirection().toString());
+            String colCodeName = order.getProperty();
+            Optional<ColumnDef> columnDef = table.getColumns().stream().filter(col -> col.getCodeName().equals(colCodeName)).findFirst();
+
+            columnDef.ifPresent(col -> orderByClause.append(col.getColumnName()));
+            if (!columnDef.isPresent()) {
+                orderByClause.append(colCodeName);
+            }
+            orderByClause.append(" ").append(order.getDirection().toString());
             if (iterator.hasNext()) {
                 orderByClause.append(COMMA);
             }

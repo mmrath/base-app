@@ -43,7 +43,8 @@ public final class RandomUtil {
     }
 
     public static String generateRandomUid(){
-        String key = UUID.randomUUID().toString().replace("-","") + System.currentTimeMillis();
-        return key + RandomStringUtils.randomAlphanumeric(5);
+        String key = UUID.randomUUID().toString().replace("-","") + Long.toHexString(System.currentTimeMillis());
+        key = key + RandomStringUtils.randomAlphanumeric(7);
+        return key.toUpperCase();
     }
 }

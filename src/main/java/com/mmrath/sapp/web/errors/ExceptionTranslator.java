@@ -68,7 +68,7 @@ public class ExceptionTranslator {
     }
 
     private ErrorDto processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorDto dto = new ErrorDto(ErrorConstants.ERR_VALIDATION);
+        ErrorDto dto = new ErrorDto(ErrorConstants.ERR_VALIDATION, "Validation failure");
 
         for (FieldError fieldError : fieldErrors) {
 

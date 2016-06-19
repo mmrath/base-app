@@ -195,7 +195,7 @@ public class AccountResource {
                             request.getContextPath();
                     mailService.sendPasswordResetMail(user, baseUrl);
                     return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
-                }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
+                }).orElse(new ResponseEntity<>("E-mail address is not registered", HttpStatus.BAD_REQUEST));
     }
 
     /**
